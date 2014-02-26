@@ -46,13 +46,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\DataSourceSection.cs" />
+    <Compile Include="AccessLogMessage.cs" />
+    <Compile Include="ActionLogMessage.cs" />
+    <Compile Include="AuditLogMessage.cs" />
+    <Compile Include="Configuration\AccessElement.cs" />
+    <Compile Include="Configuration\ActionElement.cs" />
+    <Compile Include="Configuration\AuditElement.cs" />
+    <Compile Include="Configuration\DataSourceElement.cs" />
+    <Compile Include="Configuration\DebugElement.cs" />
     <Compile Include="Configuration\ScarfSection.cs" />
     <Compile Include="DataSource\DataSourceFactory.cs" />
     <Compile Include="DataSource\FileDataSource.cs" />
     <Compile Include="DataSource\ScarfDataSource.cs" />
     <Compile Include="DataSource\MemoryDataSource.cs" />
     <Compile Include="DataSource\NullDataSource.cs" />
+    <Compile Include="DebugLogMessage.cs" />
     <Compile Include="ScarfAudit.cs" />
     <Compile Include="ScarfLogging.cs" />
     <Compile Include="ScarfContext.cs" />

@@ -16,7 +16,7 @@ namespace Scarf.DataSource.SQLServer
 {
     public class SqlServerDataSource : ScarfDataSource
     {
-        public void Initialize(DataSourceSection configuration)
+        public void Initialize(DataSourceElement configuration)
         {
             throw new System.NotImplementedException();
         }

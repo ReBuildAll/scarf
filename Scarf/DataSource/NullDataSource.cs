@@ -16,7 +16,7 @@ namespace Scarf.DataSource
 {
     internal sealed class NullDataSource : ScarfDataSource
     {
-        public void Initialize(DataSourceSection configuration)
+        public void Initialize(DataSourceElement configuration)
         {            
         }
 

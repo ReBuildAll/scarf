@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region Copyright and license
+//
+// SCARF - Security Audit, Access and Action Logging
+// Copyright (c) 2014 ReBuildAll Solutions Ltd
+//
+// Author:
+//    Lenard Gunda 
+//
+// Licensed under MIT license, see included LICENSE file for details
+#endregion
+
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scarf.Configuration
 {
-    public class DataSourceSection : ConfigurationElement
+    public class DataSourceElement : ConfigurationElement
     {
         [ConfigurationProperty("connectionStringName", IsRequired=false)]
         public string ConnectionStringName

@@ -8,6 +8,7 @@
 //
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
+
 using System;
 using System.Collections.Generic;
 using Scarf.Configuration;
@@ -16,7 +17,7 @@ namespace Scarf.DataSource
 {
     internal sealed class MemoryDataSource : ScarfDataSource
     {
-        public void Initialize(DataSourceSection configuration)
+        public void Initialize(DataSourceElement configuration)
         {
             throw new NotImplementedException();
         }

@@ -56,7 +56,7 @@ namespace Scarf.MVC
             {
                 if (filterContext.Exception != null)
                 {
-                    ScarfContext.Current.CurrentMessage.UpdateDetails(filterContext.Exception.ToString());
+                    ScarfContext.Current.UpdateCurrentMessageWithDetails(filterContext.Exception.ToString());
                 }
                 ScarfContext.Current.Commit();
             }

@@ -23,7 +23,7 @@ namespace Scarf.DataSource
 
             try
             {
-                DataSourceSection dataAccessConfiguration = configuration.DataSource;
+                DataSourceElement dataAccessConfiguration = configuration.DataSource;
                 if (string.IsNullOrWhiteSpace(dataAccessConfiguration.Type))
                 {
                     return new MemoryDataSource();

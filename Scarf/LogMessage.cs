@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace Scarf
 {
-    public sealed class LogMessage
+    public abstract class LogMessage
     {
         public const string AdditionalInfo_Form = "Form";
         public const string AdditionalInfo_Cookies = "Cookies";
@@ -62,5 +62,7 @@ namespace Scarf
         {
             Details = string.Format(detailsFormat, args);
         }
+
+        internal abstract bool CanSave();
     }
 }

@@ -21,17 +21,17 @@ namespace Scarf.MVC
 
         public override void OnActionExecuted(System.Web.Mvc.ActionExecutedContext filterContext)
         {
-            if (AutoCommit && ScarfContext.Current.CurrentMessage.Success.HasValue == false )
+            if (AutoCommit && ScarfAudit.HasResult == false )
             {
                 if (filterContext.Canceled ||
                     (filterContext.Exception != null &&
                      filterContext.ExceptionHandled == false))
                 {
-                    ScarfContext.Current.CurrentMessage.Success = false;
+                    ScarfAudit.Failed();
                 }
                 else
                 {
-                    ScarfContext.Current.CurrentMessage.Success = true;                    
+                    ScarfAudit.Succeeded();
                 }
             }
             base.OnActionExecuted(filterContext);

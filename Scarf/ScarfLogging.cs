@@ -16,12 +16,19 @@ namespace Scarf
 {
     public static class ScarfLogging
     {
-        public static void DebugMessage(string message, string details = null)
+        public static void Debug(string message, string details = null)
         {
-            
+            LogMessage logMessage = ScarfContext.Current.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
+            if (logMessage.CanSave() == false) return;
+
+            ScarfContext.Current.AddAdditionalInfo(logMessage, true, true, true);
+            logMessage.Message = message;
+            logMessage.Details = details;
+
+            ScarfContext.Current.SaveMessage(logMessage);
         }
 
-        public static ScarfSection GetConfiguration()
+        internal static ScarfSection GetConfiguration()
         {
             return ConfigurationManager.GetSection("scarf") as ScarfSection;
         }

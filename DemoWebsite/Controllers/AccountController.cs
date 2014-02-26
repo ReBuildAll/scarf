@@ -296,6 +296,7 @@ namespace DemoWebsite.Controllers
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LogAudit(MessageType.AuditLogout, SaveAdditionalInfo = false)]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();

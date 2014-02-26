@@ -16,6 +16,8 @@ namespace DemoWebsite.Controllers
         {
             ViewBag.Message = "Your application description page.";
 
+            ScarfLogging.Debug("You are now in About()!!");
+
             return View();
         }
 
