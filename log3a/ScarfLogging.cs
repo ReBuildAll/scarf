@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace log3a
 {
-    public class Log3A
+    public static class ScarfLogging
     {
+        public static void DebugMessage(string message, string details = null)
+        {
+            
+        }
     }
 }

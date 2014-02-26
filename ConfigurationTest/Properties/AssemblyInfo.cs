@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("scarf")]
-[assembly: AssemblyDescription("Security Audit, Access and Action logging framework")]
+[assembly: AssemblyTitle("ConfigurationTest")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ReBuildall Solutions Ltd")]
-[assembly: AssemblyProduct("scarf")]
-[assembly: AssemblyCopyright("Copyright © ReBuildall Solutions Ltd 2014")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("ConfigurationTest")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d8ba6e99-a358-4719-bfac-d3e4e2ec7337")]
+[assembly: Guid("a1922a2d-6ccc-4f27-be27-98a1e04e0318")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

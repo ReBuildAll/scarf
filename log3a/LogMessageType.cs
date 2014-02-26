@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace log3a
 {
-    public sealed class Log3AContext
+    public enum LogMessageType
     {
+        Audit,
+
+        Access,
+
+        Action,
+
+        Debug,
     }
 }

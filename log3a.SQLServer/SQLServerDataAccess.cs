@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace log3a.SQLServer
+﻿namespace log3a.DataAccess.SQLServer
 {
-    public class SQLServerDataAccess
+    public class SQLServerDataAccess : LogDataAccess
     {
     }
 }
