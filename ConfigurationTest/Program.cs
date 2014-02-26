@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log3a.Configuration;
+using Scarf.Configuration;
 
 namespace ConfigurationTest
 {
@@ -13,16 +9,16 @@ namespace ConfigurationTest
     {
         static void Main(string[] args)
         {
-            ScarfSection log3a = ConfigurationManager.GetSection("log3a") as ScarfSection;
+            ScarfSection scarfSection = ConfigurationManager.GetSection("scarf") as ScarfSection;
 
             try
             {
-                MyAssert(log3a != null);
-                MyAssert(log3a.DataAccess != null);
-                MyAssert(log3a.DataAccess.ConnectionStringName != null);
-                MyAssert(log3a.DataAccess.ConnectionStringName == "myConnection");
-                MyAssert(log3a.DataAccess.Type != null);
-                MyAssert(log3a.DataAccess.Type == "log3a.DataAccess.SQLServer.SQLServerDataAccess, log3a.SQLServer");
+                MyAssert(scarfSection != null);
+                MyAssert(scarfSection.DataSource != null);
+                MyAssert(scarfSection.DataSource.ConnectionStringName != null);
+                MyAssert(scarfSection.DataSource.ConnectionStringName == "myConnection");
+                MyAssert(scarfSection.DataSource.Type != null);
+                MyAssert(scarfSection.DataSource.Type == "log3a.DataSource.SQLServer.SQLServerDataAccess, log3a.SQLServer");
 
                 Console.WriteLine("OK!");
             }
@@ -39,8 +35,6 @@ namespace ConfigurationTest
             {
                 throw new InvalidOperationException();
             }
-
-            Console.WriteLine("OK!");
         }
     }
 }

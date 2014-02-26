@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using Scarf;
+using Scarf.MVC;
 
 namespace DemoWebsite.Controllers
 {
     public class HomeController : Controller
     {
+        [LogAction(LogMessageSubtype.AccessRead)]
         public ActionResult Index()
         {
             return View();

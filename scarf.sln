@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log3a", "log3a\log3a.csproj", "{BED72107-63C7-48E1-AB46-2456D19931CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarf", "Scarf\Scarf.csproj", "{BED72107-63C7-48E1-AB46-2456D19931CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebsite", "DemoWebsite\DemoWebsite.csproj", "{C9EB255D-502A-48D1-B8F9-AA5F13A0F4B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log3a.SQLServer", "log3a.SQLServer\log3a.SQLServer.csproj", "{6764A22C-4FA7-45F9-9B73-14E655A04A5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarf.SQLServer", "Scarf.SQLServer\Scarf.SQLServer.csproj", "{6764A22C-4FA7-45F9-9B73-14E655A04A5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log3a.MVC", "log3a.MVC\log3a.MVC.csproj", "{175EAAE5-C700-4F97-B40F-5A148D2539F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarf.MVC", "Scarf.MVC\Scarf.MVC.csproj", "{175EAAE5-C700-4F97-B40F-5A148D2539F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{638FC858-6954-4AE6-8E5E-CF3324DC9C94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationTest", "ConfigurationTest\ConfigurationTest.csproj", "{824B2A23-05BA-4C04-AA7C-F889F9213F4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log3a.Tests", "log3a.Tests\log3a.Tests.csproj", "{E3969B43-41A0-4046-86B8-D0DEF5356356}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarf.Tests", "Scarf.Tests\Scarf.Tests.csproj", "{E3969B43-41A0-4046-86B8-D0DEF5356356}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
