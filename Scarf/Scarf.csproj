@@ -53,11 +53,12 @@
     <Compile Include="DataSource\ScarfDataSource.cs" />
     <Compile Include="DataSource\MemoryDataSource.cs" />
     <Compile Include="DataSource\NullDataSource.cs" />
+    <Compile Include="ScarfAudit.cs" />
     <Compile Include="ScarfLogging.cs" />
     <Compile Include="ScarfContext.cs" />
     <Compile Include="LogMessage.cs" />
-    <Compile Include="LogMessageSubtype.cs" />
-    <Compile Include="LogMessageType.cs" />
+    <Compile Include="MessageType.cs" />
+    <Compile Include="MessageClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\CollectionUtility.cs" />
     <Compile Include="Utility\HttpRequestValidation.cs" />

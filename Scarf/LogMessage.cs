@@ -26,15 +26,17 @@ namespace Scarf
 
         public DateTime LoggedAt { get; set; }
 
+        public string ResourceURI { get; set; }
+
         public string User { get; set; }
 
         public string Application { get; set; }
 
         public string Computer { get; set; }
         
-        public LogMessageType Type { get; set; }
+        public MessageClass MessageClass { get; set; }
 
-        public string SubType { get; set; }
+        public string MessageType { get; set; }
 
         public bool? Success { get; set; }
 
@@ -45,5 +47,20 @@ namespace Scarf
         public string Details { get; set; }
 
         public Dictionary<string,Dictionary<string,string>> AdditionalInfo { get; set; }
+
+        public void UpdateUser()
+        {
+            this.User = ScarfContext.Current.FindUser();
+        }
+        
+        public void UpdateUserManually(string username)
+        {
+            this.User = username;
+        }
+
+        public void UpdateDetails(string detailsFormat, params object[] args)
+        {
+            Details = string.Format(detailsFormat, args);
+        }
     }
 }

@@ -16,8 +16,8 @@ namespace Scarf.MVC
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true)]
     public class LogActionAttribute : ScarfLoggingAttribute
     {
-        public LogActionAttribute(string messageSubtype) :
-            base(LogMessageType.Action, messageSubtype)
+        public LogActionAttribute(string messageType) :
+            base(MessageClass.Action, messageType)
         {
         }
     }

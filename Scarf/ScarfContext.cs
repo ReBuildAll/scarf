@@ -55,71 +55,72 @@ namespace Scarf
 
         private readonly HttpContextBase HttpContext;
 
-        private readonly System.Collections.Concurrent.ConcurrentQueue<LogMessage> queuedMessages;
+        private LogMessage currentMessage;
         
         private ScarfContext(HttpContextBase httpContext)
         {
             HttpContext = httpContext;
-            queuedMessages = new System.Collections.Concurrent.ConcurrentQueue<LogMessage>();
         }
 
-        public void QueueLogMessage(LogMessage message)
+        public void SetLogMessage(LogMessage message)
         {
-            queuedMessages.Enqueue(message);
+            if (currentMessage != null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            currentMessage = message;
+        }
+        
+        public LogMessage CurrentMessage
+        {
+            get { return currentMessage; }
         }
 
         public void Commit()
         {
-            IEnumerable<LogMessage> messages = DequeueCurrentMessages();
-
-            SaveCurrentMessages(messages);
+            SaveCurrentMessages(currentMessage);
+            currentMessage = null;
         }
 
-        private void SaveCurrentMessages(IEnumerable<LogMessage> messages)
+        private void SaveCurrentMessages(LogMessage message)
         {
             ScarfDataSource dataSource = DataSourceFactory.CreateDataSourceInstance();
-            foreach (var logMessage in messages)
-            {
-                dataSource.SaveLogMessage(logMessage);
-            }
-        }
-
-        private IEnumerable<LogMessage> DequeueCurrentMessages()
-        {
-            var messages = new List<LogMessage>();
-            while (queuedMessages.Count > 0)
-            {
-                LogMessage message;
-                if (queuedMessages.TryDequeue(out message))
-                {
-                    messages.Add(message);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            return messages;
+            dataSource.SaveLogMessage(message);
         }
 
         public LogMessage CreateMessage(
-            LogMessageType messageType, 
-            string messageSubtype)
+            MessageClass messageClass, 
+            string messageType)
         {
             var message = new LogMessage()
             {
                 EntryId = Guid.NewGuid(),
                 User = FindUser(),
+                ResourceURI = FindResourceUri(),
                 Application = FindApplication(),
-                Type = messageType,
-                SubType = messageSubtype,
+                MessageClass = messageClass,
+                MessageType = messageType,
                 Computer = FindComputer(),
                 LoggedAt = DateTime.UtcNow,
                 Success = null,
+                Message = MessageType.GetDefaultMessage ( messageType ),
                 Source = FindSource(),
             };
 
             return message;
+        }
+
+        private string FindResourceUri()
+        {
+            if (HttpContext.Request != null)
+            {
+                return HttpContext.Request.Path;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void AddAdditionalInfo(LogMessage message, bool addForm, bool addQueryString, bool addCookies)
@@ -180,7 +181,7 @@ namespace Scarf
 
         }
 
-        private string FindUser()
+        internal string FindUser()
         {
             string user = Thread.CurrentPrincipal.Identity.Name ?? string.Empty;
 

@@ -13,8 +13,8 @@ namespace Scarf.MVC
 {
     public class LogAccessAttribute : ScarfLoggingAttribute
     {
-        public LogAccessAttribute(string messageSubtype)
-            : base(LogMessageType.Access, messageSubtype)
+        public LogAccessAttribute(string messageType)
+            : base(MessageClass.Access, messageType)
         {
         }
 

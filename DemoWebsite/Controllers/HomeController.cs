@@ -6,7 +6,7 @@ namespace DemoWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        [LogAction(LogMessageSubtype.AccessRead)]
+        [LogAccess(MessageType.AccessRead, SaveAdditionalInfo = false)]
         public ActionResult Index()
         {
             return View();

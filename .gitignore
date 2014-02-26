@@ -150,3 +150,5 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+DemoWebsite/App_Data/scarf-DemoWebsite.mdf
+DemoWebsite/App_Data/scarf-DemoWebsite_log.ldf

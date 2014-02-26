@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using DemoWebsite.Models;
+using Scarf;
+using Scarf.MVC;
 
 namespace DemoWebsite.Controllers
 {
@@ -41,6 +43,7 @@ namespace DemoWebsite.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [LogAudit(MessageType.AuditLogin)]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -49,6 +52,7 @@ namespace DemoWebsite.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
+                    ScarfAudit.LoggedInAs(user.UserName);
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -58,6 +62,7 @@ namespace DemoWebsite.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            ScarfAudit.Failed();
             return View(model);
         }
 
@@ -74,6 +79,7 @@ namespace DemoWebsite.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [LogAudit(MessageType.AuditCreateUser)]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -83,6 +89,8 @@ namespace DemoWebsite.Controllers
                 if (result.Succeeded)
                 {
                     await SignInAsync(user, isPersistent: false);
+
+                    ScarfAudit.CreatedUser(model.UserName);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -92,6 +100,7 @@ namespace DemoWebsite.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            ScarfAudit.Failed();
             return View(model);
         }
 

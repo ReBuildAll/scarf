@@ -22,24 +22,30 @@ namespace Scarf.MVC
         /// </summary>
         public bool AutoCommit { get; set; }
 
-        public LogMessageType MessageType { get; private set; }
+        public bool SaveAdditionalInfo { get; set; }
 
-        public string MessageSubtype { get; private set; }
+        public MessageClass MessageClass { get; private set; }
+
+        public string MessageType { get; private set; }
         
-        public ScarfLoggingAttribute(LogMessageType messageType, string messageSubtype)
+        public ScarfLoggingAttribute(MessageClass messageClass, string messageType)
         {
             this.AutoCommit = true;
+            this.SaveAdditionalInfo = true;
+            this.MessageClass = messageClass;
             this.MessageType = messageType;
-            this.MessageSubtype = messageSubtype;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
 
-            LogMessage message = ScarfContext.Current.CreateMessage(this.MessageType, this.MessageSubtype);
-            ScarfContext.Current.AddAdditionalInfo(message, AddFormVariables, AddQueryStringVariables, AddCookies);
-            ScarfContext.Current.QueueLogMessage(message);
+            LogMessage message = ScarfContext.Current.CreateMessage(this.MessageClass, this.MessageType);
+            if (SaveAdditionalInfo == true)
+            {
+                ScarfContext.Current.AddAdditionalInfo(message, AddFormVariables, AddQueryStringVariables, AddCookies);
+            }
+            ScarfContext.Current.SetLogMessage(message);
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
@@ -48,6 +54,10 @@ namespace Scarf.MVC
 
             if (AutoCommit)
             {
+                if (filterContext.Exception != null)
+                {
+                    ScarfContext.Current.CurrentMessage.UpdateDetails(filterContext.Exception.ToString());
+                }
                 ScarfContext.Current.Commit();
             }
         }
