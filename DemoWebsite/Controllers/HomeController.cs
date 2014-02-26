@@ -23,7 +23,7 @@ namespace DemoWebsite.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Scarf is open source software.";
 
             return View();
         }
