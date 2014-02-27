@@ -1,0 +1,31 @@
+﻿body
+{
+    font-family: Calibri, Verdana, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 25px;
+}
+
+table.scarf
+{
+    border: 1px solid #b9b9b9;
+    width: 90%;
+}
+
+table.scarf thead tr th
+{
+    background-color: #008fb8;
+    color: white;
+    font-size: 120%;
+    padding-top: .25em;
+    padding-bottom: .25em;
+}
+
+table.scarf tbody tr td
+{
+    background-color: #cbf2ff;
+}
+
+table.scarf tbody tr:nth-child(even) td
+{
+    background-color: #7edfff;
+}

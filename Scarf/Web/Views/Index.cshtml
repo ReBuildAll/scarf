@@ -1,0 +1,85 @@
+﻿@model System.Collections.Generic.ICollection<Scarf.LogMessage>
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+<!doctype html>
+<html>
+    <head>
+        <title>Scarf Log Viewer</title>
+        <link rel="stylesheet" type="text/css" href="/Scarf/Resource?fileid=scarf.css" />
+    </head>
+    <body>
+        <h1>Scarf Log Viewer</h1>
+        
+        <header>
+            <ul>
+                <li>Home</li>
+                <li>Help</li>
+            </ul>            
+        </header>
+        
+        <table class="scarf">
+            <thead>
+                <tr>
+                    <th>
+                        Computer
+                    </th>
+                    <th>
+                        Resource
+                    </th>
+                    <th>
+                        Class
+                    </th>
+                    <th>
+                        Type
+                    </th>
+                    <th>
+                        Message
+                    </th>
+                    <th>
+                        User
+                    </th>
+                    <th>
+                        Timestamp
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var logMessage in Model)
+                {
+                    <tr>
+                        <td>@logMessage.Computer</td>
+                        <td>@logMessage.ResourceURI</td>
+                        <td>@logMessage.MessageClass.ToString()</td>
+                        <td>@logMessage.MessageType</td>
+                        <td>@logMessage.Message - @Html.ActionLink("Details", "Details", "Scarf", new {id = logMessage.EntryId.ToString("D")}, null)</td>
+                        <td>@logMessage.User</td>
+                        <td>@logMessage.LoggedAt.ToShortDateString() @logMessage.LoggedAt.ToLongTimeString()</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>
+                        @if (ViewBag.CurrentPage > 1)
+                        {
+                            <a href="@Url.Action("Index", "Scarf", new { page = ViewBag.CurrentPage - 1 })">&lt;&lt;&lt; Previous page </a>                            
+                        }
+                    </th>
+                    <th colspan="5">
+                        Page @ViewBag.CurrentPage / @ViewBag.TotalPages
+                    </th>
+                    <th>
+                        @if (ViewBag.CurrentPage < ViewBag.TotalPages )
+                        {
+                            <a href="@Url.Action("Index", "Scarf", new { page = ViewBag.CurrentPage + 1 })">Next page &gt;&gt;&gt;</a>
+                        }
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <footer>
+            copyright &copy; 2014, ReBuildAll Solutions Ltd. - <a href="http://github.com/ReBuildAll/scarf">hosted on GitHub</a>
+        </footer>
+    </body>
+</html>
