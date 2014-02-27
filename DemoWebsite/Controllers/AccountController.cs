@@ -46,7 +46,6 @@ namespace DemoWebsite.Controllers
         [LogAudit(MessageType.AuditLogin)]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            throw new InvalidOperationException();
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
