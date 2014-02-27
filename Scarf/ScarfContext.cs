@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Security;
 using System.Threading;
 using System.Web;
@@ -83,6 +84,13 @@ namespace Scarf
         public void UpdateCurrentMessageWithDetails(string details)
         {
             CurrentMessage.Details = details;
+        }
+
+        public void UpdateCurrentMessageWithAdditionalInfo(string infoKey, Dictionary<string, string> info)
+        {
+            Contract.Assert(CurrentMessage != null);
+
+            CurrentMessage.AdditionalInfo.Add(infoKey, info);
         }
 
         public void Commit()

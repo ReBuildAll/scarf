@@ -21,7 +21,7 @@ namespace Scarf.MVC
 
         public override void OnActionExecuted(System.Web.Mvc.ActionExecutedContext filterContext)
         {
-            if (AutoCommit && ScarfAudit.HasResult == false )
+            if (ScarfAudit.HasResult == false )
             {
                 if (filterContext.Canceled ||
                     (filterContext.Exception != null &&

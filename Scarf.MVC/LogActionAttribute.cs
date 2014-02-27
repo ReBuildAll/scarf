@@ -16,9 +16,20 @@ namespace Scarf.MVC
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true)]
     public class LogActionAttribute : ScarfLoggingAttribute
     {
+        public string Message { get; set; }
+
         public LogActionAttribute(string messageType) :
             base(MessageClass.Action, messageType)
         {
+        }
+
+        public override void OnActionExecuted(System.Web.Mvc.ActionExecutedContext filterContext)
+        {
+            if (string.IsNullOrWhiteSpace(Message) == false)
+            {
+                ScarfAction.SetMessage(Message);
+            }
+            base.OnActionExecuted(filterContext);
         }
     }
 }

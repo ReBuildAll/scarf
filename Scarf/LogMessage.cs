@@ -20,7 +20,7 @@ namespace Scarf
         public const string AdditionalInfo_Cookies = "Cookies";
         public const string AdditionalInfo_QueryString = "QueryString";
         public const string AdditionalInfo_ServerVariables = "ServerVariables";
-
+        public const string AdditionalInfo_ModelState = "ModelState";
 
         public Guid EntryId { get; set; }
 

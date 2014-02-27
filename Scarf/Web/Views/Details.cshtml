@@ -1,0 +1,87 @@
+﻿@model Scarf.LogMessage
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+<!doctype html>
+<html>
+    <head>
+        <title>Details - Scarf Log Viewer</title>
+        <link rel="stylesheet" type="text/css" href="/Scarf/Resource?fileid=scarf.css" />
+    </head>
+    <body>
+       
+        <header>
+            <ul>
+                <li>@Html.ActionLink("Home","Index", "Scarf")</li>
+                <li><a href="https://github.com/ReBuildAll/scarf/wiki">Help</a></li>
+            </ul>            
+            <h1>Log message details</h1>
+        </header>
+        
+        <table class="scarf narrow">
+            <tbody>
+                <tr>
+                    <td>Computer: </td>
+                    <td>@Model.Computer</td>
+                </tr>
+                <tr>
+                    <td>Resource: </td>
+                    <td>@Model.ResourceURI</td>
+                </tr>
+                <tr>
+                    <td>Message class: </td>
+                    <td>@Model.MessageClass.ToString()</td>
+                </tr>
+                <tr>
+                    <td>Message type: </td>
+                    <td>@Model.MessageType</td>
+                </tr>
+                <tr>
+                    <td>Success/failure: </td>
+                    <td>@(Model.Success.HasValue ? (Model.Success.Value ? "success" : "failure") : "n/a")</td>
+                </tr>
+                <tr>
+                    <td>Message: </td>
+                    <td>@Model.Message</td>
+                </tr>
+                <tr>
+                    <td>Logged in user: </td>
+                    <td>@Model.User</td>
+                </tr>
+                <tr>
+                    <td>Logged at: </td>
+                    <td>@Model.LoggedAt.ToShortDateString() @Model.LoggedAt.ToLongTimeString()</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h2>Details</h2>
+        <pre class="scarf">@Model.Details</pre>
+        
+        @if (Model.AdditionalInfo != null)
+        {
+            <h2>Additional information</h2>
+
+             foreach (var key in Model.AdditionalInfo.Keys)
+             {
+                 if (Model.AdditionalInfo[key] == null) { continue; }
+                 
+                 <h3>@key</h3>
+                 <table class="scarf">
+                     <tbody>
+                         @foreach (var item in Model.AdditionalInfo[key])
+                         {
+                             <tr>
+                                 <td>@item.Key</td>
+                                 <td>@item.Value</td>
+                             </tr>
+                         }
+                     </tbody>
+                 </table>
+             }
+        }
+
+        <footer>
+            Scarf copyright &copy; 2014, ReBuildAll Solutions Ltd. - <a href="http://github.com/ReBuildAll/scarf">hosted on GitHub</a>
+        </footer>
+    </body>
+</html>

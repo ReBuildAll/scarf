@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web.Compilation;
 using System.Web.Hosting;
@@ -30,6 +31,15 @@ namespace Scarf.Web.Controllers
             ViewBag.TotalPages = totalMessages/PAGE_SIZE + 1;
             
             return this.ScarfView("Index", messages);
+        }
+
+        public ActionResult Details(Guid id)
+        {
+            ScarfDataSource dataSource = DataSourceFactory.CreateDataSourceInstance();
+
+            LogMessage message = dataSource.GetMessageById(id);
+
+            return this.ScarfView("Details", message);
         }
 
         public ActionResult Resource(string fileid)

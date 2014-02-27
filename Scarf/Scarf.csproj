@@ -92,6 +92,7 @@
     <Compile Include="DataSource\MemoryDataSource.cs" />
     <Compile Include="DataSource\NullDataSource.cs" />
     <Compile Include="DebugLogMessage.cs" />
+    <Compile Include="ScarfAction.cs" />
     <Compile Include="ScarfAudit.cs" />
     <Compile Include="ScarfLogging.cs" />
     <Compile Include="ScarfContext.cs" />
@@ -112,6 +113,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <EmbeddedResource Include="Web\Views\Index.cshtml" />
+    <EmbeddedResource Include="Web\Views\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Web\Content\scarf.css" />

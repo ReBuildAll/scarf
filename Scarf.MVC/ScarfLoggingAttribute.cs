@@ -10,6 +10,8 @@
 #endregion
 
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Scarf.MVC
@@ -17,11 +19,6 @@ namespace Scarf.MVC
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited=true, AllowMultiple=false)]
     public abstract class ScarfLoggingAttribute : ActionFilterAttribute
     {
-        /// <summary>
-        /// Indicates if the logging will be commited as soon as the action has executed
-        /// </summary>
-        public bool AutoCommit { get; set; }
-
         public bool SaveAdditionalInfo { get; set; }
 
         public MessageClass MessageClass { get; private set; }
@@ -30,7 +27,6 @@ namespace Scarf.MVC
         
         public ScarfLoggingAttribute(MessageClass messageClass, string messageType)
         {
-            this.AutoCommit = true;
             this.SaveAdditionalInfo = true;
             this.MessageClass = messageClass;
             this.MessageType = messageType;
@@ -52,14 +48,55 @@ namespace Scarf.MVC
         {
             base.OnActionExecuted(filterContext);
 
-            if (AutoCommit)
+            if (SaveAdditionalInfo && AddModelState )
             {
-                if (filterContext.Exception != null)
-                {
-                    ScarfContext.Current.UpdateCurrentMessageWithDetails(filterContext.Exception.ToString());
-                }
-                ScarfContext.Current.Commit();
+                UpdateModelState(filterContext);
             }
+
+            if (filterContext.Exception != null)
+            {
+                ScarfContext.Current.UpdateCurrentMessageWithDetails(filterContext.Exception.ToString());
+            }
+            ScarfContext.Current.Commit();
+        }
+
+        private void UpdateModelState(ActionExecutedContext filterContext)
+        {
+            if (filterContext.Controller.ViewData.ModelState != null)
+            {
+                var modelStateInfo = new Dictionary<string, string>();
+                foreach (var modelState in filterContext.Controller.ViewData.ModelState)
+                {
+                    var modelStateErrorMessages = modelState.Value.Errors.Select(FormatModelStateErrorMessage);
+
+                    int index = 0;
+                    foreach (var stateError in modelStateErrorMessages)
+                    {
+                        string stateKey = modelState.Key + string.Format ( "[{0}]", index++);
+
+                        modelStateInfo.Add(
+                            stateKey,
+                            stateError);
+                    }
+                }
+
+                if (modelStateInfo.Count > 0)
+                {
+                    ScarfContext.Current.UpdateCurrentMessageWithAdditionalInfo(LogMessage.AdditionalInfo_ModelState,
+                        modelStateInfo);
+                }
+                else
+                {
+                    ScarfContext.Current.UpdateCurrentMessageWithAdditionalInfo(LogMessage.AdditionalInfo_ModelState,
+                        null);
+                }
+            }
+        }
+
+        private static string FormatModelStateErrorMessage(ModelError e)
+        {
+            return string.Format("{0}\r\n{1}", e.ErrorMessage,
+                e.Exception != null ? e.Exception.ToString() : "");
         }
 
         protected virtual bool AddFormVariables
@@ -79,6 +116,14 @@ namespace Scarf.MVC
         }
 
         protected virtual bool AddQueryStringVariables
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        protected virtual bool AddModelState
         {
             get
             {

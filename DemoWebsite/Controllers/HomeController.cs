@@ -35,5 +35,17 @@ namespace DemoWebsite.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Feedback()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [LogAction(MessageType.ActionUiCommand, Message = "Feedback received")]
+        public ActionResult Feedback( FormCollection form )
+        {
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -5,10 +5,22 @@
     line-height: 25px;
 }
 
+footer
+{
+    margin-top: 1em;
+    padding-top: 1em;
+    border-top: 1px solid #EEEEEE;
+}
+
 table.scarf
 {
     border: 1px solid #b9b9b9;
     width: 90%;
+}
+
+table.scarf.narrow
+{
+    width: 30%;
 }
 
 table.scarf thead tr th
@@ -28,4 +40,43 @@ table.scarf tbody tr td
 table.scarf tbody tr:nth-child(even) td
 {
     background-color: #7edfff;
+}
+
+pre.scarf
+{
+    padding: 0.5em;
+    font-size: 85%;
+    width: 90%;
+    border: 1px solid #404040;
+    background-color: #fff1d4;
+}
+
+ul
+{
+    padding: 5px;
+    margin: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border: 1px solid black;
+    background-color: #00566f;
+}
+
+ul li
+{
+    display: inline-block;
+    background-color: #008fb8;
+    color: white;
+}
+
+ul li a
+{
+    text-decoration: underline;
+    padding: 0.5em 1.5em 0.5em 1.5em;
+    color: white;
+    display: inline-block;
+}
+
+ul li:hover
+{
+    background-color: #b9b9b9;
 }

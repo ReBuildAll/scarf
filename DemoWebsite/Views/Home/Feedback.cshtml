@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Feedback";
+}
+
+<h2>Feedback</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        <label>
+            Your name: <input type="text" name="name" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Your email address: <input type="text" name="email" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Your feedback: <textarea cols="50" rows="5" name="feedback"></textarea>
+        </label>
+    </div>
+
+    <input type="submit" value="Submit"/>
+    
+}

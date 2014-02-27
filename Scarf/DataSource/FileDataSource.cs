@@ -73,7 +73,11 @@ namespace Scarf.DataSource
 
         public LogMessage GetMessageById(Guid messageId)
         {
-            throw new NotImplementedException();
+            var directoryInfo = new DirectoryInfo(loggingFolder);
+            FileInfo[] files = directoryInfo.GetFiles(string.Format("*{0}.json", messageId));
+            if (files.Length != 1) return null;
+
+            return LoadLogMessage(Path.Combine(loggingFolder, files[0].Name));
         }
 
         private LogMessage LoadLogMessage(string filename)
