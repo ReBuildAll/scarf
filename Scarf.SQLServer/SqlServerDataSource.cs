@@ -9,6 +9,7 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
+using System;
 using System.Collections.Generic;
 using Scarf.Configuration;
 
@@ -26,9 +27,14 @@ namespace Scarf.DataSource.SQLServer
             throw new System.NotImplementedException();
         }
 
-        public IEnumerable<LogMessage> GetMessages(string application)
+        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<LogMessage> messageList)
         {
             throw new System.NotImplementedException();
+        }
+
+        public LogMessage GetMessageById(Guid messageId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

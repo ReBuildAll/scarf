@@ -9,6 +9,7 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
+using System;
 using System.Collections.Generic;
 using Scarf.Configuration;
 
@@ -24,9 +25,14 @@ namespace Scarf.DataSource
         {
         }
 
-        public IEnumerable<LogMessage> GetMessages(string application)
+        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<LogMessage> messageList)
         {
-            return new LogMessage[0];
+            return 0;
+        }
+
+        public LogMessage GetMessageById(Guid messageId)
+        {
+            return null;
         }
     }
 }

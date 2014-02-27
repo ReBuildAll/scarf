@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Scarf.Configuration;
 
@@ -19,7 +20,7 @@ namespace Scarf.DataSource
 {
     public sealed class FileDataSource : ScarfDataSource
     {
-        private string folder;
+        private string loggingFolder;
 
         public void Initialize(DataSourceElement configuration)
         {
@@ -27,7 +28,7 @@ namespace Scarf.DataSource
             {
                 Directory.CreateDirectory(configuration.Path);
             }
-            folder = configuration.Path;
+            loggingFolder = configuration.Path;
         }
 
         public void SaveLogMessage(LogMessage message)
@@ -39,12 +40,57 @@ namespace Scarf.DataSource
                 DateTime.UtcNow,
                 message.EntryId.ToString("D"));
 
-            File.WriteAllText(Path.Combine(folder, filename), json);
+            File.WriteAllText(Path.Combine(loggingFolder, filename), json);
         }
 
-        public IEnumerable<LogMessage> GetMessages(string application)
+        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<LogMessage> messageList)
         {
-            throw new System.NotImplementedException();
+            var directoryInfo = new DirectoryInfo(loggingFolder);
+            FileInfo[] files = directoryInfo.GetFiles(application + "*.json");
+
+            if (files.Length == 0) return 0;
+
+            string[] orderedFiles = files.Where(info => IsUserFile(info.Attributes))
+                .OrderBy(info => info.Name, StringComparer.OrdinalIgnoreCase)
+                .Select(info => Path.Combine(loggingFolder, info.Name))
+                .Reverse()
+                .ToArray();
+
+            if (orderedFiles.Length > 0)
+            {
+                IEnumerable<LogMessage> filteredFiles = orderedFiles.Skip(pageIndex*pageSize)
+                    .Take(pageSize)
+                    .Select(LoadLogMessage);
+
+                foreach (var logMessage in filteredFiles)
+                {
+                    messageList.Add(logMessage);
+                }
+            }
+
+            return orderedFiles.Length;
         }
+
+        public LogMessage GetMessageById(Guid messageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private LogMessage LoadLogMessage(string filename)
+        {
+            string json = File.ReadAllText(filename);
+
+            LogMessage logMessage = JsonConvert.DeserializeObject<LogMessage>(json);
+
+            return logMessage;
+        }
+
+        private static bool IsUserFile(FileAttributes attributes)
+        {
+            return 0 == (attributes & (FileAttributes.Directory |
+                                       FileAttributes.Hidden |
+                                       FileAttributes.System));
+        }
+
     }
 }

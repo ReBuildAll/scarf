@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace Scarf
 {
-    public abstract class LogMessage
+    public class LogMessage
     {
         public const string AdditionalInfo_Form = "Form";
         public const string AdditionalInfo_Cookies = "Cookies";
@@ -48,21 +48,9 @@ namespace Scarf
 
         public Dictionary<string,Dictionary<string,string>> AdditionalInfo { get; set; }
 
-        public void UpdateUser()
+        internal virtual bool CanSave()
         {
-            this.User = ScarfContext.Current.FindUser();
+            return true;
         }
-        
-        public void UpdateUserManually(string username)
-        {
-            this.User = username;
-        }
-
-        public void UpdateDetails(string detailsFormat, params object[] args)
-        {
-            Details = string.Format(detailsFormat, args);
-        }
-
-        internal abstract bool CanSave();
     }
 }

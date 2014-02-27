@@ -102,10 +102,19 @@
     <Compile Include="Utility\CollectionUtility.cs" />
     <Compile Include="Utility\HttpRequestValidation.cs" />
     <Compile Include="Web\Controllers\ScarfController.cs" />
+    <Compile Include="Web\EmbeddedResourceVirtualFile.cs" />
+    <Compile Include="Web\EmbeddedResourceVirtualPathProvider.cs" />
     <Compile Include="Web\MvcIntegration.cs" />
+    <Compile Include="Web\ScarfRazorView.cs" />
+    <Compile Include="Web\ScarfViewResult.cs" />
+    <Compile Include="Web\ScarfViewResultHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <EmbeddedResource Include="Web\Views\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\Content\scarf.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

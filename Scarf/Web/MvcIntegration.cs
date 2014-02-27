@@ -22,6 +22,13 @@ namespace Scarf.Web
         public static void Start()
         {
             RegisterRoutes(RouteTable.Routes);
+
+            RegisterVirtualPathProvider();
+        }
+
+        private static void RegisterVirtualPathProvider()
+        {
+            EmbeddedResourceVirtualPathProvider.Register();
         }
 
         private static void RegisterRoutes(RouteCollection routes)
