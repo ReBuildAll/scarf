@@ -142,6 +142,7 @@ namespace DemoWebsite.Controllers
         // POST: /Account/Manage
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [LogAudit(MessageType.AuditChangeLogin)]
         public async Task<ActionResult> Manage(ManageUserViewModel model)
         {
             bool hasPassword = HasPassword();
@@ -154,6 +155,7 @@ namespace DemoWebsite.Controllers
                     IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
+                        ScarfAudit.PasswordChanged();
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                     }
                     else
@@ -176,6 +178,7 @@ namespace DemoWebsite.Controllers
                     IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
                     if (result.Succeeded)
                     {
+                        ScarfAudit.PasswordChanged();
                         return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
                     }
                     else
@@ -186,6 +189,7 @@ namespace DemoWebsite.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            ScarfAudit.Failed();
             return View(model);
         }
 
