@@ -11,30 +11,45 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Scarf.Configuration;
 
 namespace Scarf.DataSource
 {
     internal sealed class MemoryDataSource : ScarfDataSource
     {
+        private static readonly HashSet<LogMessage> Messages = new HashSet<LogMessage>();
+
         public void Initialize(DataSourceElement configuration)
         {
-            throw new NotImplementedException();
         }
 
         public void SaveLogMessage(LogMessage message)
         {
-            throw new NotImplementedException();
+            Messages.Add(message);
         }
 
         public int GetMessages(string application, int pageIndex, int pageSize, ICollection<LogMessage> messageList)
         {
-            throw new System.NotImplementedException();
+            IOrderedEnumerable<LogMessage> appMessages =
+                from m in Messages
+                where m.Application == application
+                orderby m.LoggedAt descending
+                select m;
+
+            IEnumerable<LogMessage> viewableMessages = appMessages.Skip(pageIndex*pageSize).Take(pageSize);
+
+            foreach (var logMessage in viewableMessages)
+            {
+                messageList.Add(logMessage);
+            }
+
+            return appMessages.Count();
         }
 
         public LogMessage GetMessageById(Guid messageId)
         {
-            throw new NotImplementedException();
+            return Messages.SingleOrDefault(m => m.EntryId == messageId);
         }
     }
 }
