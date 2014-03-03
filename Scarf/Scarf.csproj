@@ -106,6 +106,7 @@
     <Compile Include="Web\EmbeddedResourceVirtualFile.cs" />
     <Compile Include="Web\EmbeddedResourceVirtualPathProvider.cs" />
     <Compile Include="Web\MvcIntegration.cs" />
+    <Compile Include="Web\ScarfAuthorizeAttribute.cs" />
     <Compile Include="Web\ScarfRazorView.cs" />
     <Compile Include="Web\ScarfViewResult.cs" />
     <Compile Include="Web\ScarfViewResultHelper.cs" />

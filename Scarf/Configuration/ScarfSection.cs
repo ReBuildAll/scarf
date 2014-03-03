@@ -45,6 +45,12 @@ namespace Scarf.Configuration
             get { return (DebugElement)base["debug"]; }
         }
 
+        [ConfigurationProperty("security", IsRequired = false)]
+        public SecurityElement Security
+        {
+            get { return (SecurityElement)base["security"]; }
+        }
+
         [ConfigurationProperty("applicationName")]
         public string ApplicationName
         {

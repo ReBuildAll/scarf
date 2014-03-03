@@ -117,7 +117,7 @@ namespace Scarf
             MessageClass messageClass, 
             string messageType)
         {
-            LogMessage message = CreateMessageInstanceFromClass(messageClass);
+            LogMessage message = ScarfLogging.CreateEmptyMessageInstanceFromClass(messageClass);
 
             FillMessageValues(messageClass, messageType, message);
 
@@ -137,23 +137,6 @@ namespace Scarf
             message.Success = null;
             message.Message = MessageType.GetDefaultMessage(messageType);
             message.Source = FindSource();
-        }
-
-        private LogMessage CreateMessageInstanceFromClass(MessageClass messageClass)
-        {
-            switch (messageClass)
-            {
-                case MessageClass.Debug:
-                    return new DebugLogMessage();
-                case MessageClass.Audit:
-                    return new AuditLogMessage();
-                case MessageClass.Action:
-                    return new ActionLogMessage();
-                case MessageClass.Access:
-                    return new AccessLogMessage();
-                default:
-                    throw new InvalidOperationException();
-            }
         }
 
         public void AddAdditionalInfo(LogMessage message, bool addForm, bool addQueryString, bool addCookies)

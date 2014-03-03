@@ -45,15 +45,55 @@ namespace Scarf.DataSource
             using (SqlCommand command = CreateMutipleQueryCommand(connection, application, pageIndex, pageSize))
             {
                 connection.Open();
-                int results = command.ExecuteNonQuery();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    ReadAllMessagesFromReader(messageList, reader );
+                }
 
                 return (int) command.Parameters["@totalMessages"].Value;
             }
         }
 
+        private void ReadAllMessagesFromReader(ICollection<LogMessage> messageList, SqlDataReader reader)
+        {
+            while (reader.Read())
+            {
+                LogMessage message = ReadMessageFromReader(reader);
+                messageList.Add(message);
+            }
+        }
+        
+        private LogMessage ReadMessageFromReader(SqlDataReader reader)
+        {
+            string messageClassString = reader.GetString(reader.GetOrdinal("Class"));
+            string messageAsJson = reader.GetString(reader.GetOrdinal("LogMessageAsJson"));
+
+            var messageClass = (MessageClass)Enum.Parse(typeof(MessageClass), messageClassString);
+            
+            var message = (LogMessage) JsonConvert.DeserializeObject(messageAsJson, ScarfLogging.MapMessageClassToClrType(messageClass));
+            
+            return message;
+        }
+
         public LogMessage GetMessageById(Guid messageId)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(GetConnectionString()))
+            using (SqlCommand command = CreateSingleQueryCommand(connection, messageId))
+            {
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        LogMessage message = ReadMessageFromReader(reader);
+                        return message;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
         }
 
         private string GetConnectionString()
@@ -66,35 +106,52 @@ namespace Scarf.DataSource
             SqlCommand queryCommand = connection.CreateCommand();
 
             queryCommand.CommandText =
-                @"SELECT @totalMessages = COUNT(1)
+                @"SET NOCOUNT ON;
+SELECT @totalMessages = COUNT(1)
                   FROM scarf_log
-                  WHERE ApplicationNAme = @applicationName
+                  WHERE ApplicationName = @applicationName
+;
+WITH scarflog AS
+(
+    SELECT  *,
+            ROW_NUMBER() OVER 
+                     (ORDER BY LoggedAtUtc DESC, Sequence DESC) AS RN
+    FROM    scarf_Log             
+	WHERE   ApplicationName = @applicationName
+)
+SELECT  *
+FROM scarflog
+WHERE RN BETWEEN @StartRowIndex AND @EndRowIndex
+
 ";
             //http://stackoverflow.com/questions/5620758/t-sql-skip-take-stored-procedure
-//                    ;WITH cte AS
-//(
-//    SELECT  Journals.JournalId, 
-//            Journals.Year, 
-//            Journals.Title, 
-//            ArticleCategories.ItemText,
-//            ROW_NUMBER() OVER 
-//                     (ORDER BY Journals.JournalId,ArticleCategories.ItemText) AS RN
-//    FROM    Journals LEFT OUTER JOIN
-//            ArticleCategories 
-//             ON Journals.ArticleCategoryId = ArticleCategories.ArticleCategoryId
-//)
-//    SELECT  JournalId, 
-//            Year, 
-//            Title, 
-//            ItemText
-//FROM cte
-//WHERE RN BETWEEN 11 AND 20";
 
+            int startIndex = pageIndex*pageSize;
+            int endIndex = startIndex + pageSize;
 
             AddParameter(queryCommand, "@applicationName", application);
             AddOutParameter<int>(queryCommand, "@totalMessages");
+            AddParameter<int>(queryCommand, "@StartRowIndex", startIndex);
+            AddParameter<int>(queryCommand, "@EndRowIndex", endIndex);
 
             return queryCommand;
+        }
+
+        private SqlCommand CreateSingleQueryCommand(SqlConnection connection, Guid entryId)
+        {
+            SqlCommand queryCommand = connection.CreateCommand();
+
+            queryCommand.CommandText =
+                @"SET NOCOUNT ON;
+                SELECT  *
+    FROM    scarf_Log             
+	WHERE   Id = @entryId";
+
+
+            AddParameter(queryCommand, "@entryId", entryId);
+
+            return queryCommand;
+            
         }
 
         private SqlCommand CreateInsertCommand(SqlConnection connection, LogMessage message)

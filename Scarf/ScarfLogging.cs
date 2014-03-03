@@ -9,6 +9,7 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
+using System;
 using System.Configuration;
 using Scarf.Configuration;
 
@@ -31,6 +32,40 @@ namespace Scarf
         internal static ScarfSection GetConfiguration()
         {
             return ConfigurationManager.GetSection("scarf") as ScarfSection;
+        }
+
+        public static LogMessage CreateEmptyMessageInstanceFromClass(MessageClass messageClass)
+        {
+            switch (messageClass)
+            {
+                case MessageClass.Debug:
+                    return new DebugLogMessage();
+                case MessageClass.Audit:
+                    return new AuditLogMessage();
+                case MessageClass.Action:
+                    return new ActionLogMessage();
+                case MessageClass.Access:
+                    return new AccessLogMessage();
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        public static Type MapMessageClassToClrType(MessageClass messageClass)
+        {
+            switch (messageClass)
+            {
+                case MessageClass.Debug:
+                    return typeof(DebugLogMessage);
+                case MessageClass.Audit:
+                    return typeof(AuditLogMessage);
+                case MessageClass.Action:
+                    return typeof(ActionLogMessage);
+                case MessageClass.Access:
+                    return typeof(AccessLogMessage);
+                default:
+                    throw new InvalidOperationException();
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ using Scarf.Web;
 
 namespace Scarf.Web.Controllers
 {
+    [ScarfAuthorize]
     public class ScarfController : Controller
     {
         public const int PAGE_SIZE = 50;
@@ -26,18 +27,26 @@ namespace Scarf.Web.Controllers
                 pageIndex, 
                 PAGE_SIZE, 
                 messages);
-            
+
+            ViewBag.TotalMessages = totalMessages;
             ViewBag.CurrentPage = pageIndex + 1;
             ViewBag.TotalPages = totalMessages/PAGE_SIZE + 1;
             
             return this.ScarfView("Index", messages);
         }
 
-        public ActionResult Details(Guid id)
+        [HandleError(View="Index", ExceptionType=typeof(ArgumentException))]
+        public ActionResult Details(Guid? id)
         {
+            if (id.HasValue == false)
+            {
+                return RedirectToAction("Index");
+            }
+
             ScarfDataSource dataSource = DataSourceFactory.CreateDataSourceInstance();
 
-            LogMessage message = dataSource.GetMessageById(id);
+            LogMessage message = dataSource.GetMessageById(id.Value);
+            if (message == null) return RedirectToAction("Index");
 
             return this.ScarfView("Details", message);
         }
@@ -57,11 +66,12 @@ namespace Scarf.Web.Controllers
 
         private string GetContentType(string id)
         {
-            if (Path.GetExtension(id).ToLower() == ".css")
+            var extension = Path.GetExtension(id);
+            if (extension != null && extension.ToLower() == ".css")
             {
                 return "text/css";
             }
-            if (Path.GetExtension(id).ToLower() == ".js")
+            if (extension != null && extension.ToLower() == ".js")
             {
                 return "text/javascript";
             }
