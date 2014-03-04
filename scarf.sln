@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configurat
 		sqlservertablecreate.sql = sqlservertablecreate.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scarf.WebApi", "Scarf.WebApi\Scarf.WebApi.csproj", "{DD368E73-CEFB-4EDE-A757-EBBC27A1B3EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{E3969B43-41A0-4046-86B8-D0DEF5356356}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3969B43-41A0-4046-86B8-D0DEF5356356}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3969B43-41A0-4046-86B8-D0DEF5356356}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD368E73-CEFB-4EDE-A757-EBBC27A1B3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD368E73-CEFB-4EDE-A757-EBBC27A1B3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD368E73-CEFB-4EDE-A757-EBBC27A1B3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD368E73-CEFB-4EDE-A757-EBBC27A1B3EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

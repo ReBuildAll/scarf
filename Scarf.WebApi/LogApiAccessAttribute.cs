@@ -9,11 +9,11 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
-namespace Scarf.MVC
+namespace Scarf.WebApi
 {
-    public class LogAccessAttribute : ScarfLoggingAttribute
+    public class LogApiAccessAttribute : ScarfApiLoggingAttribute
     {
-        public LogAccessAttribute(string messageType)
+        public LogApiAccessAttribute(string messageType)
             : base(MessageClass.Access, messageType)
         {
         }
