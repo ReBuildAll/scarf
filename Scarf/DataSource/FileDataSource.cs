@@ -43,6 +43,14 @@ namespace Scarf.DataSource
             File.WriteAllText(Path.Combine(loggingFolder, filename), json);
         }
 
+        public void SaveLogMessages(params ScarfLogMessage[] messages)
+        {
+            foreach (var scarfLogMessage in messages)
+            {
+                SaveLogMessage(scarfLogMessage);
+            }
+        }
+
         public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             var directoryInfo = new DirectoryInfo(loggingFolder);

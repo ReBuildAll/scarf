@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using Scarf.Configuration;
 using Scarf.DataSource;
 
 namespace Scarf.Web.Controllers
@@ -42,7 +41,7 @@ namespace Scarf.Web.Controllers
             ViewBag.CurrentPage = pageIndex + 1;
             ViewBag.TotalPages = totalMessages/PAGE_SIZE + 1;
             
-            return this.ScarfView("Index", messages);
+            return ScarfConfiguration.ViewResultFactory.Create(this, "Index", messages);
         }
 
         [HandleError(View="Index", ExceptionType=typeof(ArgumentException))]
@@ -58,7 +57,7 @@ namespace Scarf.Web.Controllers
             ScarfLogMessage message = dataSource.GetMessageById(id.Value);
             if (message == null) return RedirectToAction("Index");
 
-            return this.ScarfView("Details", message);
+            return ScarfConfiguration.ViewResultFactory.Create(this, "Details", message);
         }
 
         public ActionResult Resource(string fileid)

@@ -30,6 +30,14 @@ namespace Scarf.Tests.Infrastructure
             _messages.Add(message);
         }
 
+        public void SaveLogMessages(params ScarfLogMessage[] messages)
+        {
+            foreach (var scarfLogMessage in messages)
+            {
+                _messages.Add(scarfLogMessage);
+            }
+        }
+
         public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             IOrderedEnumerable<ScarfLogMessage> appMessages =
@@ -51,6 +59,11 @@ namespace Scarf.Tests.Infrastructure
         public ScarfLogMessage GetMessageById(Guid messageId)
         {
             return _messages.SingleOrDefault(m => m.EntryId == messageId);
+        }
+
+        public void Clear()
+        {
+            _messages.Clear();
         }
     }
 }

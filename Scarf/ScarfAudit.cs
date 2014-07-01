@@ -15,36 +15,36 @@ namespace Scarf
     {
         public static void LoggedInAs(string username)
         {
-            ScarfContext.Current.CurrentMessage.Message = string.Format("User '{0}' logged in", username);
+            ScarfContext.Current.LogMessage.Message = string.Format("User '{0}' logged in", username);
             Succeeded();
         }
         
         public static void CreatedUser(string username)
         {
-            ScarfContext.Current.CurrentMessage.Message = string.Format("Created new user '{0}'", username);
+            ScarfContext.Current.LogMessage.Message = string.Format("Created new user '{0}'", username);
             Succeeded();
         }
 
         public static void PasswordChanged()
         {
-            ScarfContext.Current.CurrentMessage.Message = string.Format("Changed password");
+            ScarfContext.Current.LogMessage.Message = string.Format("Changed password");
             Succeeded();
         }
 
         public static void Failed()
         {
-            ScarfContext.Current.CurrentMessage.Message += " failed.";
-            ScarfContext.Current.CurrentMessage.Success = false;            
+            ScarfContext.Current.LogMessage.Message += " failed.";
+            ScarfContext.Current.LogMessage.Success = false;            
         }
 
         public static void Succeeded()
         {
-            ScarfContext.Current.CurrentMessage.Success = true;
+            ScarfContext.Current.LogMessage.Success = true;
         }
 
         public static bool HasResult
         {
-            get { return ScarfContext.Current.CurrentMessage.Success.HasValue; }
+            get { return ScarfContext.Current.LogMessage.Success.HasValue; }
         }
     }
 }

@@ -29,6 +29,14 @@ namespace Scarf.DataSource
             Messages.Add(message);
         }
 
+        public void SaveLogMessages(params ScarfLogMessage[] messages)
+        {
+            foreach (var scarfLogMessage in messages)
+            {
+                Messages.Add(scarfLogMessage);
+            }
+        }
+
         public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             IOrderedEnumerable<ScarfLogMessage> appMessages =

@@ -110,7 +110,7 @@
     <Compile Include="Web\ScarfAuthorizeAttribute.cs" />
     <Compile Include="Web\ScarfRazorView.cs" />
     <Compile Include="Web\ScarfViewResult.cs" />
-    <Compile Include="Web\ScarfViewResultHelper.cs" />
+    <Compile Include="Web\ScarfViewResultFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

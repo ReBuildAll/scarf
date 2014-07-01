@@ -21,8 +21,10 @@ using Scarf.Utility;
 
 namespace Scarf
 {
-    public sealed class ScarfContext
+    public sealed class ScarfContext : IDisposable
     {
+        #region Static
+
         [ThreadStatic] private static ScarfContext threadContext;
 
         public static ScarfContext Current
@@ -36,6 +38,11 @@ namespace Scarf
 
                 return GetCurrent(new HttpContextWrapper(System.Web.HttpContext.Current));
             }
+        }
+
+        public static ScarfContext CreateInlineContext(HttpContextBase httpContext = null )
+        {
+            return new ScarfContext(httpContext);
         }
 
         private static ScarfContext GetThreadContext()
@@ -57,9 +64,13 @@ namespace Scarf
             return httpContext.Items["ScarfContext"] as ScarfContext;
         }
 
+        #endregion
+
         private readonly HttpContextBase _httpContext;
 
-        private ScarfLogMessage currentMessage;
+        private ScarfLogMessage _ambientLogMessage;
+
+        private List<ScarfLogMessage> _logMessages = new List<ScarfLogMessage>();
         
         private ScarfContext(HttpContextBase httpContext)
         {
@@ -68,40 +79,40 @@ namespace Scarf
 
         public void SetLogMessage(ScarfLogMessage message)
         {
-            if (currentMessage != null)
+            if (_ambientLogMessage != null)
             {
                 throw new InvalidOperationException();
             }
 
-            currentMessage = message;
+            _ambientLogMessage = message;
         }
         
-        internal ScarfLogMessage CurrentMessage
+        internal ScarfLogMessage LogMessage
         {
-            get { return currentMessage; }
+            get { return _ambientLogMessage; }
         }
 
         public void UpdateCurrentMessageWithDetails(string details)
         {
-            CurrentMessage.Details = details;
+            LogMessage.Details = details;
         }
 
         public void UpdateCurrentMessageWithAdditionalInfo(string infoKey, Dictionary<string, string> info)
         {
-            Contract.Assert(CurrentMessage != null);
+            Contract.Assert(LogMessage != null);
 
-            CurrentMessage.AdditionalInfo.Add(infoKey, info);
+            LogMessage.AdditionalInfo.Add(infoKey, info);
         }
 
         public void Commit()
         {
-            SaveMessage(currentMessage);
-            currentMessage = null;
+            SaveMessage(_ambientLogMessage);
+            _ambientLogMessage = null;
         }
 
         public void Rollback()
         {
-            currentMessage = null;
+            _ambientLogMessage = null;
         }
 
         public void SaveMessage(ScarfLogMessage message)
@@ -211,18 +222,17 @@ namespace Scarf
 
         internal string FindUser()
         {
-            string user = Thread.CurrentPrincipal.Identity.Name ?? string.Empty;
-
-            if (_httpContext == null) return user;
-
-            var webUser = _httpContext.User;
-            if (webUser != null
-                && (webUser.Identity.Name ?? string.Empty).Length > 0)
+            if (_httpContext != null)
             {
-                user = webUser.Identity.Name;
+                var webUser = _httpContext.User;
+                if (webUser != null
+                    && (webUser.Identity.Name ?? string.Empty).Length > 0)
+                {
+                    return webUser.Identity.Name;
+                }
             }
 
-            return user;
+            return Thread.CurrentPrincipal.Identity.Name ?? string.Empty;
         }
         
         private static string FindComputer()
@@ -244,6 +254,14 @@ namespace Scarf
         private string FindSource()
         {
             return null;
+        }
+
+        #endregion
+
+        #region IDisposable 
+
+        public void Dispose()
+        {
         }
 
         #endregion

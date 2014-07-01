@@ -12,6 +12,7 @@
 using System.Configuration;
 using Scarf.Configuration;
 using Scarf.DataSource;
+using Scarf.Web;
 
 namespace Scarf
 {
@@ -20,6 +21,8 @@ namespace Scarf
         private static DataSourceFactory _dataSourceFactory;
 
         private static ScarfSection _configuration;
+
+        private static ScarfViewResultFactory _viewResultFactory;
 
         public static DataSourceFactory DataSourceFactory
         {
@@ -51,6 +54,23 @@ namespace Scarf
             set
             {
                 _configuration = value;
+            }
+        }
+
+        public static ScarfViewResultFactory ViewResultFactory
+        {
+            get
+            {
+                if (_viewResultFactory == null)
+                {
+                    _viewResultFactory = new BuildManagerBasedScarfViewResultFactory();
+                }
+
+                return _viewResultFactory;
+            }
+            set
+            {
+                _viewResultFactory = value;
             }
         }
 

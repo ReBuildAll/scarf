@@ -10,8 +10,6 @@
 #endregion
 
 using System;
-using System.Configuration;
-using Scarf.Configuration;
 
 namespace Scarf
 {

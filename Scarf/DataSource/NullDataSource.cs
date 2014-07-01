@@ -25,6 +25,10 @@ namespace Scarf.DataSource
         {
         }
 
+        public void SaveLogMessages(params ScarfLogMessage[] messages)
+        {
+        }
+
         public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             return 0;

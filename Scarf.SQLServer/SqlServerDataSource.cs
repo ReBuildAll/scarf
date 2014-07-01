@@ -31,9 +31,34 @@ namespace Scarf.DataSource
         public void SaveLogMessage(ScarfLogMessage message)
         {
             using (var connection = new SqlConnection(GetConnectionString()))
-            using (SqlCommand command = CreateInsertCommand(connection, message))
             {
                 connection.Open();
+                SaveLogMessageInternal(message, connection);
+                connection.Close();
+            }
+        }
+
+        public void SaveLogMessages(params ScarfLogMessage[] messages)
+        {
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    foreach (var message in messages)
+                    {
+                        SaveLogMessageInternal(message, connection);
+                    }
+                    transaction.Commit();
+                }
+                connection.Close();
+            }
+        }
+
+        private void SaveLogMessageInternal(ScarfLogMessage message, SqlConnection connection)
+        {
+            using (SqlCommand command = CreateInsertCommand(connection, message))
+            {
                 int results = command.ExecuteNonQuery();
                 // TODO check for errors?                
             }

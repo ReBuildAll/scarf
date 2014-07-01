@@ -21,6 +21,8 @@ namespace Scarf.DataSource
 
         void SaveLogMessage(ScarfLogMessage message);
 
+        void SaveLogMessages(params ScarfLogMessage[] messages);
+
         int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList );
 
         ScarfLogMessage GetMessageById(Guid messageId);
