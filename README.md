@@ -7,3 +7,7 @@ Many times software come with non functional requirements to track access to res
 With scarf, you can log audit events, access events and actions performed by the user. Scarfs should work with any type of .NET application but it was mainly intended for MVC and WebApi applications that need to keep track of such events. The integration modules allow you to add attributes to your MVC and WebApi action methods to initiate logging.
 
 Logs are saved in a database or in files (or you can create custom data sources if you want). They contain a lot of information beyond what has happened: HTTP Server headers, query strings variables, POST field values, cookies and even MVC model state values.
+
+The project is hosted on GitHub, where you will also find a wiki on how to use Scarf.
+
+Scarf supports unit testing by providing various points for injecting dependencies. Please examine the unit tests to see how you can take advantage of these features.
