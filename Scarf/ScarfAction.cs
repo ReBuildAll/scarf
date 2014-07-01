@@ -6,7 +6,7 @@ namespace Scarf.MVC
     {
         public static void SetMessage(string message)
         {
-            ScarfContext.Current.LogMessage.Message = message;
+            ScarfContext.Current.PrimaryMessage.Message = message;
         }
     }
 }

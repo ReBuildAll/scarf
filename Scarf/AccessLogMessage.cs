@@ -17,13 +17,7 @@ namespace Scarf
     {
         internal override bool CanSave()
         {
-            var configuration = ScarfConfiguration.ConfigurationSection;
-            if (configuration.Access != null && configuration.Access.Enabled == false)
-            {
-                return false;
-            }
-
-            return true;
+            return ScarfConfiguration.IsAccessLoggingEnabled;
         }
     }
 }

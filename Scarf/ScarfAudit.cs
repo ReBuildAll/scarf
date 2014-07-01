@@ -13,38 +13,43 @@ namespace Scarf
 {
     public static class ScarfAudit
     {
+        public static void Start(string messageType)
+        {
+            ScarfContext.Current.CreatePrimaryMessage(MessageClass.Audit, messageType);
+        }
+
         public static void LoggedInAs(string username)
         {
-            ScarfContext.Current.LogMessage.Message = string.Format("User '{0}' logged in", username);
+            ScarfContext.Current.PrimaryMessage.Message = string.Format("User '{0}' logged in", username);
             Succeeded();
         }
         
         public static void CreatedUser(string username)
         {
-            ScarfContext.Current.LogMessage.Message = string.Format("Created new user '{0}'", username);
+            ScarfContext.Current.PrimaryMessage.Message = string.Format("Created new user '{0}'", username);
             Succeeded();
         }
 
         public static void PasswordChanged()
         {
-            ScarfContext.Current.LogMessage.Message = string.Format("Changed password");
+            ScarfContext.Current.PrimaryMessage.Message = string.Format("Changed password");
             Succeeded();
         }
 
         public static void Failed()
         {
-            ScarfContext.Current.LogMessage.Message += " failed.";
-            ScarfContext.Current.LogMessage.Success = false;            
+            ScarfContext.Current.PrimaryMessage.Message += " failed.";
+            ScarfContext.Current.PrimaryMessage.Success = false;            
         }
 
         public static void Succeeded()
         {
-            ScarfContext.Current.LogMessage.Success = true;
+            ScarfContext.Current.PrimaryMessage.Success = true;
         }
 
         public static bool HasResult
         {
-            get { return ScarfContext.Current.LogMessage.Success.HasValue; }
+            get { return ScarfContext.Current.PrimaryMessage.Success.HasValue; }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Scarf.Configuration
     public class ActionElement : ConfigurationElement
     {
         [ConfigurationProperty("enabled", IsRequired = false, DefaultValue = true)]
-        public bool Enabled
+        public virtual bool Enabled
         {
             get { return (bool)base["enabled"]; }
         }

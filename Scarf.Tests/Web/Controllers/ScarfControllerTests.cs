@@ -1,6 +1,18 @@
-﻿using System;
+﻿#region Copyright and license
+//
+// SCARF - Security Audit, Access and Action Logging
+// Copyright (c) 2014 ReBuildAll Solutions Ltd
+//
+// Author:
+//    Lenard Gunda 
+//
+// Licensed under MIT license, see included LICENSE file for details
+#endregion
+
+using System;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Scarf.Tests.Configuration;
 using Scarf.Tests.Infrastructure;
 using Scarf.Web.Controllers;
 
@@ -24,7 +36,7 @@ namespace Scarf.Tests.Web.Controllers
             {
                 var testMessage = new ScarfLogMessage()
                 {
-                    Application = "Scarf.Tests",
+                    Application = ConfigurationMocks.ApplicationName,
                     EntryId = Guid.NewGuid(),
                     LoggedAt = startTime,
                     MessageClass = MessageClass.Audit,

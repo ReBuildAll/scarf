@@ -21,27 +21,32 @@ namespace Scarf.Tests.Infrastructure
     {
         private readonly HashSet<ScarfLogMessage> _messages = new HashSet<ScarfLogMessage>();
 
+        public HashSet<ScarfLogMessage> Messages
+        {
+            get { return _messages; }
+        }
+
         public void Initialize(DataSourceElement configuration)
         {
         }
 
         public void SaveLogMessage(ScarfLogMessage message)
         {
-            _messages.Add(message);
+            Messages.Add(message);
         }
 
         public void SaveLogMessages(params ScarfLogMessage[] messages)
         {
             foreach (var scarfLogMessage in messages)
             {
-                _messages.Add(scarfLogMessage);
+                Messages.Add(scarfLogMessage);
             }
         }
 
         public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             IOrderedEnumerable<ScarfLogMessage> appMessages =
-                from m in _messages
+                from m in Messages
                 where m.Application == application
                 orderby m.LoggedAt descending
                 select m;
@@ -58,12 +63,12 @@ namespace Scarf.Tests.Infrastructure
 
         public ScarfLogMessage GetMessageById(Guid messageId)
         {
-            return _messages.SingleOrDefault(m => m.EntryId == messageId);
+            return Messages.SingleOrDefault(m => m.EntryId == messageId);
         }
 
         public void Clear()
         {
-            _messages.Clear();
+            Messages.Clear();
         }
     }
 }

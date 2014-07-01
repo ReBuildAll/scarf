@@ -16,12 +16,12 @@ namespace Scarf.Configuration
     public class AuditElement : ConfigurationElement
     {
         [ConfigurationProperty("onlyFailures", IsRequired = false, DefaultValue = false)]
-        public bool LogOnlyFailures {
+        public virtual bool LogOnlyFailures {
             get { return (bool) base["onlyFailures"]; }
         }
 
         [ConfigurationProperty("enabled", IsRequired = false, DefaultValue=true)]
-        public bool Enabled
+        public virtual bool Enabled
         {
             get { return (bool)base["enabled"]; }
         }

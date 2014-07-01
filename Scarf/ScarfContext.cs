@@ -31,18 +31,28 @@ namespace Scarf
         {
             get
             {
+                // inline context
+                if (threadContext != null)
+                {
+                    return threadContext;
+                }
+                // thread static context
                 if (System.Web.HttpContext.Current == null)
                 {
                     return GetThreadContext();
                 }
-
+                // httpcontext based context
                 return GetCurrent(new HttpContextWrapper(System.Web.HttpContext.Current));
             }
         }
 
         public static ScarfContext CreateInlineContext(HttpContextBase httpContext = null )
         {
-            return new ScarfContext(httpContext);
+            if (threadContext != null)
+            {
+                throw new InvalidOperationException("Cannot have multiple inline contexts on the same thread!");
+            }
+            return GetThreadContext();
         }
 
         private static ScarfContext GetThreadContext()
@@ -68,9 +78,9 @@ namespace Scarf
 
         private readonly HttpContextBase _httpContext;
 
-        private ScarfLogMessage _ambientLogMessage;
+        private ScarfLogMessage _primaryMessage;
 
-        private List<ScarfLogMessage> _logMessages = new List<ScarfLogMessage>();
+        private List<ScarfLogMessage> _secondaryMessages = new List<ScarfLogMessage>();
         
         private ScarfContext(HttpContextBase httpContext)
         {
@@ -79,40 +89,41 @@ namespace Scarf
 
         public void SetLogMessage(ScarfLogMessage message)
         {
-            if (_ambientLogMessage != null)
+            if (_primaryMessage != null)
             {
                 throw new InvalidOperationException();
             }
 
-            _ambientLogMessage = message;
+            _primaryMessage = message;
         }
         
-        internal ScarfLogMessage LogMessage
+        internal ScarfLogMessage PrimaryMessage
         {
-            get { return _ambientLogMessage; }
+            get { return _primaryMessage; }
         }
 
         public void UpdateCurrentMessageWithDetails(string details)
         {
-            LogMessage.Details = details;
+            PrimaryMessage.Details = details;
         }
 
         public void UpdateCurrentMessageWithAdditionalInfo(string infoKey, Dictionary<string, string> info)
         {
-            Contract.Assert(LogMessage != null);
+            Contract.Assert(PrimaryMessage != null);
 
-            LogMessage.AdditionalInfo.Add(infoKey, info);
+            PrimaryMessage.AdditionalInfo.Add(infoKey, info);
         }
 
         public void Commit()
         {
-            SaveMessage(_ambientLogMessage);
-            _ambientLogMessage = null;
+            SaveMessage(_primaryMessage);
+            _primaryMessage = null;
         }
 
         public void Rollback()
         {
-            _ambientLogMessage = null;
+            _primaryMessage = null;
+            _secondaryMessages.Clear();
         }
 
         public void SaveMessage(ScarfLogMessage message)
@@ -124,18 +135,27 @@ namespace Scarf
             }
         }
 
-        public ScarfLogMessage CreateMessage(
+        public ScarfLogMessage CreatePrimaryMessage(
             MessageClass messageClass, 
             string messageType)
         {
-            ScarfLogMessage message = ScarfLogging.CreateEmptyMessageInstanceFromClass(messageClass);
+            if (_primaryMessage != null)
+            {
+                throw new InvalidOperationException("Ambient message already created in this context!");
+            }
+            if (IsDisposed)
+            {
+                throw new InvalidOperationException("Disposed context cannot be used!");
+            }
 
-            FillMessageValues(messageClass, messageType, message);
+            _primaryMessage = ScarfLogging.CreateEmptyMessageInstanceFromClass(messageClass);
 
-            return message;
+            FillMessageDefaultValues(messageClass, messageType, _primaryMessage);
+
+            return _primaryMessage;
         }
 
-        private void FillMessageValues(MessageClass messageClass, string messageType, ScarfLogMessage message)
+        private void FillMessageDefaultValues(MessageClass messageClass, string messageType, ScarfLogMessage message)
         {
             message.EntryId = Guid.NewGuid();
             message.User = FindUser();
@@ -189,7 +209,7 @@ namespace Scarf
 
         private string FindResourceUri()
         {
-            if (_httpContext.Request != null)
+            if (_httpContext != null && _httpContext.Request != null)
             {
                 return _httpContext.Request.Path;
             }
@@ -262,7 +282,30 @@ namespace Scarf
 
         public void Dispose()
         {
+            Dispose(true);
         }
+
+        ~ScarfContext()
+        {            
+            Dispose(false);
+        }
+
+        private void Dispose(bool byUser)
+        {
+            if (byUser)
+            {
+                GC.SuppressFinalize(this);
+            }
+
+            Rollback();
+            IsDisposed = true;
+            if (threadContext != null)
+            {
+                threadContext = null;
+            }
+        }
+
+        public bool IsDisposed { get; private set; }
 
         #endregion
     }

@@ -87,5 +87,64 @@ namespace Scarf
                 return true;
             }
         }
+
+        public static bool IsAuditLoggingEnabled
+        {
+            get
+            {
+                var configuration = ConfigurationSection;
+                if (configuration.Audit != null && configuration.Audit.Enabled == false)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        public static bool IsAccessLoggingEnabled
+        {
+            get
+            {
+                var configuration = ConfigurationSection;
+                if (configuration.Access != null && configuration.Access.Enabled == false)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        public static bool IsDebugLoggingEnabled
+        {
+            get
+            {
+                var configuration = ConfigurationSection;
+                if (configuration.Debug != null && configuration.Debug.Enabled == false)
+                {
+                    return false;
+                }
+#if DEBUG
+                return true;
+#else
+                return false;
+#endif
+            }
+        }
+
+        public static bool IsAuditLoggingOnlyForFailures
+        {
+            get
+            {
+                var configuration = ConfigurationSection;
+                if (configuration.Audit != null && configuration.Audit.LogOnlyFailures == false )
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
     }
 }

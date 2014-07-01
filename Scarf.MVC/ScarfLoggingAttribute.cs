@@ -36,7 +36,7 @@ namespace Scarf.MVC
         {
             base.OnActionExecuting(filterContext);
 
-            ScarfLogMessage message = ScarfContext.Current.CreateMessage(this.MessageClass, this.MessageType);
+            ScarfLogMessage message = ScarfContext.Current.CreatePrimaryMessage(this.MessageClass, this.MessageType);
             if (SaveAdditionalInfo == true)
             {
                 ScarfContext.Current.AddAdditionalInfo(message, AddFormVariables, AddQueryStringVariables, AddCookies);

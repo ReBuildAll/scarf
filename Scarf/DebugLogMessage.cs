@@ -17,13 +17,7 @@ namespace Scarf
     {
         internal override bool CanSave()
         {
-            var configuration = ScarfConfiguration.ConfigurationSection;
-            if (configuration.Debug != null && configuration.Debug.Enabled == false)
-            {
-                return false;
-            }
-
-            return true;
+            return ScarfConfiguration.IsDebugLoggingEnabled;
         }
     }
 }

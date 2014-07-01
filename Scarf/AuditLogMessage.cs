@@ -17,21 +17,15 @@ namespace Scarf
     {
         internal override bool CanSave()
         {
-            var configuration = ScarfConfiguration.ConfigurationSection;
-            if (configuration.Audit != null)
+            if (ScarfConfiguration.IsAuditLoggingEnabled)
             {
-                if (configuration.Audit.Enabled == false)
+                if (!ScarfConfiguration.IsAuditLoggingOnlyForFailures || (Success.HasValue && Success.Value == false))
                 {
-                    return false;
-                }
-
-                if (configuration.Audit.LogOnlyFailures && Success.HasValue && Success.Value == true)
-                {
-                    return false;
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         }
     }
 }

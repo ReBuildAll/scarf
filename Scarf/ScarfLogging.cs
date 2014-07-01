@@ -17,7 +17,7 @@ namespace Scarf
     {
         public static void Debug(string message, string details = null)
         {
-            ScarfLogMessage logMessage = ScarfContext.Current.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
+            ScarfLogMessage logMessage = ScarfContext.Current.CreatePrimaryMessage(MessageClass.Debug, MessageType.DebugMessage);
             if (logMessage.CanSave() == false) return;
 
             ScarfContext.Current.AddAdditionalInfo(logMessage, true, true, true);

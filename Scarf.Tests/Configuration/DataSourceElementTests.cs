@@ -1,4 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿#region Copyright and license
+//
+// SCARF - Security Audit, Access and Action Logging
+// Copyright (c) 2014 ReBuildAll Solutions Ltd
+//
+// Author:
+//    Lenard Gunda 
+//
+// Licensed under MIT license, see included LICENSE file for details
+#endregion
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Scarf.Configuration;
 using Scarf.DataSource;
@@ -19,7 +30,7 @@ namespace Scarf.Tests.Configuration
             var dataSourceMock = new Mock<Scarf.Configuration.DataSourceElement>();
             dataSourceMock.SetupGet(ds => ds.Type).Returns(testDataSourceTypeName);
 
-            _scarfSectionMock = new Mock<ScarfSection>();
+            _scarfSectionMock = ConfigurationMocks.CreateNewScarfSectionMock();
             _scarfSectionMock.SetupGet(s => s.DataSource).Returns(dataSourceMock.Object);
 
             ScarfConfiguration.ConfigurationSection = _scarfSectionMock.Object;

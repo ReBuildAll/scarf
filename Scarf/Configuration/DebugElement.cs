@@ -20,7 +20,7 @@ namespace Scarf.Configuration
 #else
         [ConfigurationProperty("enabled", IsRequired = false, DefaultValue = false)]
 #endif
-        public bool Enabled
+        public virtual bool Enabled
         {
             get { return (bool)base["enabled"]; }
         }
