@@ -11,6 +11,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Web;
+using Scarf.Utility;
 
 namespace Scarf
 {
@@ -22,6 +24,13 @@ namespace Scarf
         public const string AdditionalInfo_ServerVariables = "ServerVariables";
         public const string AdditionalInfo_ModelState = "ModelState";
         public const string AdditionalInfo_Custom = "Custom";
+
+        private HttpContextBase _httpContext;
+
+        public ScarfLogMessage(HttpContextBase httpContext)
+        {
+            _httpContext = httpContext;
+        }
 
         public Guid EntryId { get; set; }
 
@@ -52,6 +61,49 @@ namespace Scarf
         internal virtual bool CanSave()
         {
             return true;
+        }
+
+        public void AddAdditionalInfo(bool addForm, bool addQueryString, bool addCookies)
+        {
+            if (_httpContext != null)
+            {
+                var unvalidatedCollections =
+                    _httpContext.Request.TryGetUnvalidatedCollections((form, queryString, cookie) => new
+                    {
+                        Form = form,
+                        QueryString = queryString,
+                        Cookie = cookie
+                    });
+
+                EnsureAdditionalInfo();
+
+                AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_ServerVariables,
+                    CollectionUtility.CopyCollection(_httpContext.Request.ServerVariables));
+
+                if (addForm)
+                {
+                    AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_Form,
+                        CollectionUtility.CopyCollection(unvalidatedCollections.Form));
+                }
+                if (addQueryString)
+                {
+                    AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_QueryString,
+                        CollectionUtility.CopyCollection(unvalidatedCollections.QueryString));
+                }
+                if (addCookies)
+                {
+                    AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_Cookies,
+                        CollectionUtility.CopyCollection(unvalidatedCollections.Cookie));
+                }
+            }
+        }
+
+        private void EnsureAdditionalInfo()
+        {
+            if (AdditionalInfo == null)
+            {
+                AdditionalInfo = new Dictionary<string, Dictionary<string, string>>();
+            }
         }
     }
 }

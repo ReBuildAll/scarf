@@ -34,7 +34,7 @@ namespace Scarf.Tests.Web.Controllers
             DateTime startTime = DateTime.UtcNow.AddDays(-30);
             for (int i = 0; i < ScarfController.PAGE_SIZE * 2 + 1; i++)
             {
-                var testMessage = new ScarfLogMessage()
+                var testMessage = new ScarfLogMessage(null)
                 {
                     Application = ConfigurationMocks.ApplicationName,
                     EntryId = Guid.NewGuid(),

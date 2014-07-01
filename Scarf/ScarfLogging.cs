@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Web;
 
 namespace Scarf
 {
@@ -17,28 +18,26 @@ namespace Scarf
     {
         public static void Debug(string message, string details = null)
         {
-            ScarfLogMessage logMessage = ScarfContext.Current.CreatePrimaryMessage(MessageClass.Debug, MessageType.DebugMessage);
-            if (logMessage.CanSave() == false) return;
+            ScarfContext.Current.CreatePrimaryMessage(MessageClass.Debug, MessageType.DebugMessage);
+            if (ScarfContext.Current.PrimaryMessage.CanSave() == false) return;
 
-            ScarfContext.Current.AddAdditionalInfo(logMessage, true, true, true);
-            logMessage.Message = message;
-            logMessage.Details = details;
-
-            ScarfContext.Current.SaveMessage(logMessage);
+            ScarfContext.Current.PrimaryMessage.AddAdditionalInfo(true, true, true);
+            ScarfContext.Current.PrimaryMessage.Message = message;
+            ScarfContext.Current.PrimaryMessage.Details = details;
         }
 
-        public static ScarfLogMessage CreateEmptyMessageInstanceFromClass(MessageClass messageClass)
+        internal static ScarfLogMessage CreateEmptyMessageInstanceFromClass(MessageClass messageClass, HttpContextBase httpContext)
         {
             switch (messageClass)
             {
                 case MessageClass.Debug:
-                    return new DebugLogMessage();
+                    return new DebugLogMessage(httpContext);
                 case MessageClass.Audit:
-                    return new AuditLogMessage();
+                    return new AuditLogMessage(httpContext);
                 case MessageClass.Action:
-                    return new ActionLogMessage();
+                    return new ActionLogMessage(httpContext);
                 case MessageClass.Access:
-                    return new AccessLogMessage();
+                    return new AccessLogMessage(httpContext);
                 default:
                     throw new InvalidOperationException();
             }

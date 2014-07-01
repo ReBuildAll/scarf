@@ -38,12 +38,15 @@ namespace Scarf.WebApi
         {
             base.OnActionExecuting(filterContext);
 
-            ScarfLogMessage message = ScarfContext.Current.CreatePrimaryMessage(this.MessageClass, this.MessageType);
-            if (SaveAdditionalInfo == true)
+            var options = new MessageOptions()
             {
-                ScarfContext.Current.AddAdditionalInfo(message, AddFormVariables, AddQueryStringVariables, AddCookies);
-            }
-            ScarfContext.Current.SetLogMessage(message);
+                SaveAdditionalInfo = SaveAdditionalInfo,
+                AddFormVariables = AddFormVariables,
+                AddQueryStringVariables = AddQueryStringVariables,
+                AddCookies = AddCookies
+            };
+
+            ScarfContext.Current.CreatePrimaryMessage(this.MessageClass, this.MessageType, options );
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext filterContext)

@@ -9,12 +9,16 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
-using Scarf.Configuration;
+using System.Web;
 
 namespace Scarf
 {
     public sealed class DebugLogMessage : ScarfLogMessage
     {
+        public DebugLogMessage(HttpContextBase httpContext) : base(httpContext)
+        {
+        }
+
         internal override bool CanSave()
         {
             return ScarfConfiguration.IsDebugLoggingEnabled;

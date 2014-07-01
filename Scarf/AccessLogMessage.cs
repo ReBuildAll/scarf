@@ -9,12 +9,16 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
-using Scarf.Configuration;
+using System.Web;
 
 namespace Scarf
 {
     public sealed class AccessLogMessage : ScarfLogMessage
     {
+        public AccessLogMessage(HttpContextBase httpContext) : base(httpContext)
+        {
+        }
+
         internal override bool CanSave()
         {
             return ScarfConfiguration.IsAccessLoggingEnabled;

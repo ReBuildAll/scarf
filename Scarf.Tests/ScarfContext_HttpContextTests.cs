@@ -9,19 +9,17 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Scarf.Tests.Configuration;
 using Scarf.Tests.Infrastructure;
 
 namespace Scarf.Tests
 {
     [TestClass]
-    class ScarfContext_HttpContextTests
+    public class ScarfContext_HttpContextTests
     {
         private static TestDataSource dataSource;
 
@@ -34,10 +32,32 @@ namespace Scarf.Tests
             ScarfConfiguration.ConfigurationSection = ConfigurationMocks.CreateNewScarfSectionMock().Object;
         }
 
+        private Mock<HttpContextBase> CreateHttpContext()
+        {
+            var httpContext = new Mock<HttpContextBase>();
+
+            var items = new Dictionary<string, object>();
+            httpContext.SetupGet(h => h.Items).Returns(items);
+
+            return httpContext;
+        }
+
         [TestInitialize]
         public void InitTests()
         {
             dataSource.Clear();
+        }
+
+        [TestMethod]
+        public void ContextSeparation()
+        {
+            var httpContext1 = CreateHttpContext();
+            var httpContext2 = CreateHttpContext();
+
+            using (ScarfContext context1 = ScarfContext.CreateInlineContext(httpContext1.Object))
+            using (ScarfContext context2 = ScarfContext.CreateInlineContext(httpContext2.Object))
+            {                
+            }
         }
     }
 }

@@ -9,10 +9,16 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
+using System.Web;
+
 namespace Scarf
 {
     public sealed class ActionLogMessage : ScarfLogMessage
     {
+        public ActionLogMessage(HttpContextBase httpContext) : base(httpContext)
+        {
+        }
+
         internal override bool CanSave()
         {
             return ScarfConfiguration.IsActionLoggingEnabled;

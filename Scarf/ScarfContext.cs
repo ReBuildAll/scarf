@@ -48,6 +48,10 @@ namespace Scarf
 
         public static ScarfContext CreateInlineContext(HttpContextBase httpContext = null )
         {
+            if (httpContext != null)
+            {
+                return GetCurrent(httpContext);
+            }
             if (threadContext != null)
             {
                 throw new InvalidOperationException("Cannot have multiple inline contexts on the same thread!");
@@ -85,16 +89,6 @@ namespace Scarf
         private ScarfContext(HttpContextBase httpContext)
         {
             _httpContext = httpContext;
-        }
-
-        public void SetLogMessage(ScarfLogMessage message)
-        {
-            if (_primaryMessage != null)
-            {
-                throw new InvalidOperationException();
-            }
-
-            _primaryMessage = message;
         }
         
         internal ScarfLogMessage PrimaryMessage
@@ -135,9 +129,10 @@ namespace Scarf
             }
         }
 
-        public ScarfLogMessage CreatePrimaryMessage(
+        public void CreatePrimaryMessage(
             MessageClass messageClass, 
-            string messageType)
+            string messageType,
+            MessageOptions messageOptions = null )
         {
             if (_primaryMessage != null)
             {
@@ -148,11 +143,22 @@ namespace Scarf
                 throw new InvalidOperationException("Disposed context cannot be used!");
             }
 
-            _primaryMessage = ScarfLogging.CreateEmptyMessageInstanceFromClass(messageClass);
+            _primaryMessage = ScarfLogging.CreateEmptyMessageInstanceFromClass(messageClass, _httpContext);
 
             FillMessageDefaultValues(messageClass, messageType, _primaryMessage);
 
-            return _primaryMessage;
+            FillMessageAdditionalInfo(messageOptions);
+        }
+
+        private void FillMessageAdditionalInfo(MessageOptions messageOptions)
+        {
+            if (messageOptions != null && messageOptions.SaveAdditionalInfo)
+            {
+                _primaryMessage.AddAdditionalInfo(
+                    messageOptions.AddFormVariables,
+                    messageOptions.AddQueryStringVariables,
+                    messageOptions.AddCookies);
+            }
         }
 
         private void FillMessageDefaultValues(MessageClass messageClass, string messageType, ScarfLogMessage message)
@@ -168,41 +174,6 @@ namespace Scarf
             message.Success = null;
             message.Message = MessageType.GetDefaultMessage(messageType);
             message.Source = FindSource();
-        }
-
-        public void AddAdditionalInfo(ScarfLogMessage message, bool addForm, bool addQueryString, bool addCookies)
-        {
-            if (_httpContext != null)
-            {
-                var unvalidatedCollections =
-                    _httpContext.Request.TryGetUnvalidatedCollections((form, queryString, cookie) => new
-                    {
-                        Form = form,
-                        QueryString = queryString,
-                        Cookie = cookie
-                    });
-
-                message.AdditionalInfo = new Dictionary<string, Dictionary<string, string>>();
-
-                message.AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_ServerVariables,
-                    CollectionUtility.CopyCollection(_httpContext.Request.ServerVariables));
-
-                if (addForm)
-                {
-                    message.AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_Form,
-                        CollectionUtility.CopyCollection(unvalidatedCollections.Form));
-                }
-                if (addQueryString)
-                {
-                    message.AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_QueryString,
-                        CollectionUtility.CopyCollection(unvalidatedCollections.QueryString));
-                }
-                if (addCookies)
-                {
-                    message.AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_Cookies,
-                        CollectionUtility.CopyCollection(unvalidatedCollections.Cookie));
-                }
-            }
         }
 
         #region Find information methods
@@ -299,14 +270,19 @@ namespace Scarf
 
             Rollback();
             IsDisposed = true;
-            if (threadContext != null)
-            {
-                threadContext = null;
-            }
+            threadContext = null;
         }
 
         public bool IsDisposed { get; private set; }
 
         #endregion
+    }
+
+    public class MessageOptions
+    {
+        public bool SaveAdditionalInfo { get; set; }
+        public bool AddFormVariables { get; set; }
+        public bool AddQueryStringVariables { get; set; }
+        public bool AddCookies { get; set; }
     }
 }

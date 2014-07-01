@@ -38,6 +38,16 @@ namespace Scarf.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void CannotNestInlineContexts()
+        {
+            using (ScarfContext context1 = ScarfContext.CreateInlineContext())
+            using (ScarfContext context2 = ScarfContext.CreateInlineContext())
+            {
+            }
+        }
+
+        [TestMethod]
         public void SingleAmbientMessage()
         {
             using (ScarfContext context = ScarfContext.CreateInlineContext())

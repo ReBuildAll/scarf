@@ -9,12 +9,16 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
-using Scarf.Configuration;
+using System.Web;
 
 namespace Scarf
 {
     public sealed class AuditLogMessage : ScarfLogMessage
     {
+        public AuditLogMessage(HttpContextBase httpContext) : base(httpContext)
+        {
+        }
+
         internal override bool CanSave()
         {
             if (ScarfConfiguration.IsAuditLoggingEnabled)
