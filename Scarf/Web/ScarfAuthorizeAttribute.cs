@@ -1,10 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region Copyright and license
+//
+// SCARF - Security Audit, Access and Action Logging
+// Copyright (c) 2014 ReBuildAll Solutions Ltd
+//
+// Author:
+//    Lenard Gunda 
+//
+// Licensed under MIT license, see included LICENSE file for details
+#endregion
+
+using System;
 using System.Linq;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
+using Scarf.Configuration;
 
 namespace Scarf.Web
 {
@@ -19,7 +28,7 @@ namespace Scarf.Web
 
         public ScarfAuthorizeAttribute()
         {
-            var configuration = ScarfLogging.GetConfiguration();
+            var configuration = ScarfConfiguration.ConfigurationSection;
             if (configuration.Security != null)
             {
                 var security = configuration.Security;

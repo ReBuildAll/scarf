@@ -1,11 +1,21 @@
-﻿using System;
+﻿#region Copyright and license
+//
+// SCARF - Security Audit, Access and Action Logging
+// Copyright (c) 2014 ReBuildAll Solutions Ltd
+//
+// Author:
+//    Lenard Gunda 
+//
+// Licensed under MIT license, see included LICENSE file for details
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Web.Compilation;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using Scarf.Configuration;
 using Scarf.DataSource;
-using Scarf.Web;
 
 namespace Scarf.Web.Controllers
 {
@@ -16,14 +26,14 @@ namespace Scarf.Web.Controllers
 
         public ActionResult Index( int? page )
         {
-            ScarfDataSource dataSource = DataSourceFactory.CreateDataSourceInstance();
+            ScarfDataSource dataSource = ScarfConfiguration.DataSourceFactory.CreateDataSourceInstance();
 
-            var messages = new List<LogMessage>();
+            var messages = new List<ScarfLogMessage>();
             var pageIndex = page.HasValue ? page.Value - 1 : 0;
             if (pageIndex < 0) pageIndex = 0;
 
             int totalMessages = dataSource.GetMessages(
-                ScarfLogging.GetConfiguration().ApplicationName,
+                ScarfConfiguration.ConfigurationSection.ApplicationName,
                 pageIndex, 
                 PAGE_SIZE, 
                 messages);
@@ -43,9 +53,9 @@ namespace Scarf.Web.Controllers
                 return RedirectToAction("Index");
             }
 
-            ScarfDataSource dataSource = DataSourceFactory.CreateDataSourceInstance();
+            ScarfDataSource dataSource = ScarfConfiguration.DataSourceFactory.CreateDataSourceInstance();
 
-            LogMessage message = dataSource.GetMessageById(id.Value);
+            ScarfLogMessage message = dataSource.GetMessageById(id.Value);
             if (message == null) return RedirectToAction("Index");
 
             return this.ScarfView("Details", message);

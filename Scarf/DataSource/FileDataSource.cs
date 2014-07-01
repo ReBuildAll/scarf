@@ -31,7 +31,7 @@ namespace Scarf.DataSource
             loggingFolder = configuration.Path;
         }
 
-        public void SaveLogMessage(LogMessage message)
+        public void SaveLogMessage(ScarfLogMessage message)
         {
             string json = JsonConvert.SerializeObject(message, Formatting.Indented);
 
@@ -43,7 +43,7 @@ namespace Scarf.DataSource
             File.WriteAllText(Path.Combine(loggingFolder, filename), json);
         }
 
-        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<LogMessage> messageList)
+        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             var directoryInfo = new DirectoryInfo(loggingFolder);
             FileInfo[] files = directoryInfo.GetFiles(application + "*.json");
@@ -58,7 +58,7 @@ namespace Scarf.DataSource
 
             if (orderedFiles.Length > 0)
             {
-                IEnumerable<LogMessage> filteredFiles = orderedFiles.Skip(pageIndex*pageSize)
+                IEnumerable<ScarfLogMessage> filteredFiles = orderedFiles.Skip(pageIndex*pageSize)
                     .Take(pageSize)
                     .Select(LoadLogMessage);
 
@@ -71,7 +71,7 @@ namespace Scarf.DataSource
             return orderedFiles.Length;
         }
 
-        public LogMessage GetMessageById(Guid messageId)
+        public ScarfLogMessage GetMessageById(Guid messageId)
         {
             var directoryInfo = new DirectoryInfo(loggingFolder);
             FileInfo[] files = directoryInfo.GetFiles(string.Format("*{0}.json", messageId));
@@ -80,11 +80,11 @@ namespace Scarf.DataSource
             return LoadLogMessage(Path.Combine(loggingFolder, files[0].Name));
         }
 
-        private LogMessage LoadLogMessage(string filename)
+        private ScarfLogMessage LoadLogMessage(string filename)
         {
             string json = File.ReadAllText(filename);
 
-            LogMessage logMessage = JsonConvert.DeserializeObject<LogMessage>(json);
+            ScarfLogMessage logMessage = JsonConvert.DeserializeObject<ScarfLogMessage>(json);
 
             return logMessage;
         }

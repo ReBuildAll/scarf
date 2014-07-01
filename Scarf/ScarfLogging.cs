@@ -19,7 +19,7 @@ namespace Scarf
     {
         public static void Debug(string message, string details = null)
         {
-            LogMessage logMessage = ScarfContext.Current.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
+            ScarfLogMessage logMessage = ScarfContext.Current.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
             if (logMessage.CanSave() == false) return;
 
             ScarfContext.Current.AddAdditionalInfo(logMessage, true, true, true);
@@ -29,12 +29,7 @@ namespace Scarf
             ScarfContext.Current.SaveMessage(logMessage);
         }
 
-        internal static ScarfSection GetConfiguration()
-        {
-            return ConfigurationManager.GetSection("scarf") as ScarfSection;
-        }
-
-        public static LogMessage CreateEmptyMessageInstanceFromClass(MessageClass messageClass)
+        public static ScarfLogMessage CreateEmptyMessageInstanceFromClass(MessageClass messageClass)
         {
             switch (messageClass)
             {

@@ -36,7 +36,7 @@ namespace Scarf.MVC
         {
             base.OnActionExecuting(filterContext);
 
-            LogMessage message = ScarfContext.Current.CreateMessage(this.MessageClass, this.MessageType);
+            ScarfLogMessage message = ScarfContext.Current.CreateMessage(this.MessageClass, this.MessageType);
             if (SaveAdditionalInfo == true)
             {
                 ScarfContext.Current.AddAdditionalInfo(message, AddFormVariables, AddQueryStringVariables, AddCookies);
@@ -57,6 +57,7 @@ namespace Scarf.MVC
             {
                 ScarfContext.Current.UpdateCurrentMessageWithDetails(filterContext.Exception.ToString());
             }
+
             ScarfContext.Current.Commit();
         }
 
@@ -82,12 +83,12 @@ namespace Scarf.MVC
 
                 if (modelStateInfo.Count > 0)
                 {
-                    ScarfContext.Current.UpdateCurrentMessageWithAdditionalInfo(LogMessage.AdditionalInfo_ModelState,
+                    ScarfContext.Current.UpdateCurrentMessageWithAdditionalInfo(ScarfLogMessage.AdditionalInfo_ModelState,
                         modelStateInfo);
                 }
                 else
                 {
-                    ScarfContext.Current.UpdateCurrentMessageWithAdditionalInfo(LogMessage.AdditionalInfo_ModelState,
+                    ScarfContext.Current.UpdateCurrentMessageWithAdditionalInfo(ScarfLogMessage.AdditionalInfo_ModelState,
                         null);
                 }
             }

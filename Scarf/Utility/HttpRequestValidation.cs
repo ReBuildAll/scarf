@@ -1,4 +1,15 @@
-﻿#region License, Terms and Author(s)
+﻿#region Copyright and license
+//
+// SCARF - Security Audit, Access and Action Logging
+// Copyright (c) 2014 ReBuildAll Solutions Ltd
+//
+// Author:
+//    Lenard Gunda 
+//
+// Licensed under MIT license, see included LICENSE file for details
+// ---------------------------------------------------------------------
+// These methods are based on the open source ELMAH project and licensed
+// under the Apache-2 license. https://code.google.com/p/elmah/
 //
 // ELMAH - Error Logging Modules and Handlers for ASP.NET
 // Copyright (c) 2004-9 Atif Aziz. All rights reserved.
@@ -18,7 +29,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-//
+// ---------------------------------------------------------------------
 #endregion
 
 using System;

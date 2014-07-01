@@ -11,17 +11,11 @@
 
 namespace Scarf
 {
-    public sealed class ActionLogMessage : LogMessage
+    public sealed class ActionLogMessage : ScarfLogMessage
     {
         internal override bool CanSave()
         {
-            var configuration = ScarfLogging.GetConfiguration();
-            if (configuration.Action != null && configuration.Action.Enabled == false)
-            {
-                return false;
-            }
-
-            return true;
+            return ScarfConfiguration.IsActionLoggingEnabled;
         }
     }
 }

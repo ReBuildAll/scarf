@@ -59,14 +59,14 @@ namespace Scarf
 
         private readonly HttpContextBase _httpContext;
 
-        private LogMessage currentMessage;
+        private ScarfLogMessage currentMessage;
         
         private ScarfContext(HttpContextBase httpContext)
         {
             _httpContext = httpContext;
         }
 
-        public void SetLogMessage(LogMessage message)
+        public void SetLogMessage(ScarfLogMessage message)
         {
             if (currentMessage != null)
             {
@@ -76,7 +76,7 @@ namespace Scarf
             currentMessage = message;
         }
         
-        internal LogMessage CurrentMessage
+        internal ScarfLogMessage CurrentMessage
         {
             get { return currentMessage; }
         }
@@ -104,27 +104,27 @@ namespace Scarf
             currentMessage = null;
         }
 
-        public void SaveMessage(LogMessage message)
+        public void SaveMessage(ScarfLogMessage message)
         {
             if (message.CanSave())
             {
-                ScarfDataSource dataSource = DataSourceFactory.CreateDataSourceInstance();
+                ScarfDataSource dataSource = ScarfConfiguration.DataSourceFactory.CreateDataSourceInstance();
                 dataSource.SaveLogMessage(message);
             }
         }
 
-        public LogMessage CreateMessage(
+        public ScarfLogMessage CreateMessage(
             MessageClass messageClass, 
             string messageType)
         {
-            LogMessage message = ScarfLogging.CreateEmptyMessageInstanceFromClass(messageClass);
+            ScarfLogMessage message = ScarfLogging.CreateEmptyMessageInstanceFromClass(messageClass);
 
             FillMessageValues(messageClass, messageType, message);
 
             return message;
         }
 
-        private void FillMessageValues(MessageClass messageClass, string messageType, LogMessage message)
+        private void FillMessageValues(MessageClass messageClass, string messageType, ScarfLogMessage message)
         {
             message.EntryId = Guid.NewGuid();
             message.User = FindUser();
@@ -139,7 +139,7 @@ namespace Scarf
             message.Source = FindSource();
         }
 
-        public void AddAdditionalInfo(LogMessage message, bool addForm, bool addQueryString, bool addCookies)
+        public void AddAdditionalInfo(ScarfLogMessage message, bool addForm, bool addQueryString, bool addCookies)
         {
             if (_httpContext != null)
             {
@@ -153,22 +153,22 @@ namespace Scarf
 
                 message.AdditionalInfo = new Dictionary<string, Dictionary<string, string>>();
 
-                message.AdditionalInfo.Add(LogMessage.AdditionalInfo_ServerVariables,
+                message.AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_ServerVariables,
                     CollectionUtility.CopyCollection(_httpContext.Request.ServerVariables));
 
                 if (addForm)
                 {
-                    message.AdditionalInfo.Add(LogMessage.AdditionalInfo_Form,
+                    message.AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_Form,
                         CollectionUtility.CopyCollection(unvalidatedCollections.Form));
                 }
                 if (addQueryString)
                 {
-                    message.AdditionalInfo.Add(LogMessage.AdditionalInfo_QueryString,
+                    message.AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_QueryString,
                         CollectionUtility.CopyCollection(unvalidatedCollections.QueryString));
                 }
                 if (addCookies)
                 {
-                    message.AdditionalInfo.Add(LogMessage.AdditionalInfo_Cookies,
+                    message.AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_Cookies,
                         CollectionUtility.CopyCollection(unvalidatedCollections.Cookie));
                 }
             }
@@ -188,7 +188,7 @@ namespace Scarf
 
         private string FindApplication()
         {
-            ScarfSection configuration = ScarfLogging.GetConfiguration();
+            ScarfSection configuration = ScarfConfiguration.ConfigurationSection;
             if (string.IsNullOrWhiteSpace(configuration.ApplicationName) == false)
             {
                 return configuration.ApplicationName;

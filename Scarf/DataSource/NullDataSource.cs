@@ -21,16 +21,16 @@ namespace Scarf.DataSource
         {            
         }
 
-        public void SaveLogMessage(LogMessage message)
+        public void SaveLogMessage(ScarfLogMessage message)
         {
         }
 
-        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<LogMessage> messageList)
+        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             return 0;
         }
 
-        public LogMessage GetMessageById(Guid messageId)
+        public ScarfLogMessage GetMessageById(Guid messageId)
         {
             return null;
         }

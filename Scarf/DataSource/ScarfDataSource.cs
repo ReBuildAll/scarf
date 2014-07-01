@@ -19,10 +19,10 @@ namespace Scarf.DataSource
     {
         void Initialize(DataSourceElement configuration);
 
-        void SaveLogMessage(LogMessage message);
+        void SaveLogMessage(ScarfLogMessage message);
 
-        int GetMessages(string application, int pageIndex, int pageSize, ICollection<LogMessage> messageList );
+        int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList );
 
-        LogMessage GetMessageById(Guid messageId);
+        ScarfLogMessage GetMessageById(Guid messageId);
     }
 }

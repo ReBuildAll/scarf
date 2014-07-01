@@ -16,19 +16,19 @@ namespace Scarf.Configuration
     public class DataSourceElement : ConfigurationElement
     {
         [ConfigurationProperty("connectionStringName", IsRequired=false)]
-        public string ConnectionStringName
+        public virtual string ConnectionStringName
         {
             get { return (string)base["connectionStringName"]; }
         }
 
         [ConfigurationProperty("type", IsRequired = true)]
-        public string Type 
+        public virtual string Type 
         {
             get { return (string)base["type"]; }
         }
 
         [ConfigurationProperty("path", IsRequired = false)]
-        public string Path
+        public virtual string Path
         {
             get { return (string)base["path"]; }
         }

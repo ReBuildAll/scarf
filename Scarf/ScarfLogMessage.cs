@@ -14,13 +14,14 @@ using System.Collections.Generic;
 
 namespace Scarf
 {
-    public class LogMessage
+    public class ScarfLogMessage
     {
         public const string AdditionalInfo_Form = "Form";
         public const string AdditionalInfo_Cookies = "Cookies";
         public const string AdditionalInfo_QueryString = "QueryString";
         public const string AdditionalInfo_ServerVariables = "ServerVariables";
         public const string AdditionalInfo_ModelState = "ModelState";
+        public const string AdditionalInfo_Custom = "Custom";
 
         public Guid EntryId { get; set; }
 

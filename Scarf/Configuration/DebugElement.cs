@@ -15,7 +15,11 @@ namespace Scarf.Configuration
 {
     public class DebugElement : ConfigurationElement
     {
+#if DEBUG
         [ConfigurationProperty("enabled", IsRequired = false, DefaultValue = true)]
+#else
+        [ConfigurationProperty("enabled", IsRequired = false, DefaultValue = false)]
+#endif
         public bool Enabled
         {
             get { return (bool)base["enabled"]; }

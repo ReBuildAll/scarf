@@ -14,11 +14,16 @@ using Scarf.Configuration;
 
 namespace Scarf.DataSource
 {
-    internal static class DataSourceFactory
+    public interface DataSourceFactory
     {
-        public static ScarfDataSource CreateDataSourceInstance()
+        ScarfDataSource CreateDataSourceInstance();
+    }
+
+    internal class DefaultDataSourceFactory : DataSourceFactory
+    {
+        public ScarfDataSource CreateDataSourceInstance()
         {
-            ScarfSection configuration = ScarfLogging.GetConfiguration();
+            ScarfSection configuration = ScarfConfiguration.ConfigurationSection;
             if (configuration.DataSource == null) return new MemoryDataSource();
 
             try

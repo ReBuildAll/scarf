@@ -9,13 +9,15 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
+using Scarf.Configuration;
+
 namespace Scarf
 {
-    public sealed class AccessLogMessage : LogMessage
+    public sealed class AccessLogMessage : ScarfLogMessage
     {
         internal override bool CanSave()
         {
-            var configuration = ScarfLogging.GetConfiguration();
+            var configuration = ScarfConfiguration.ConfigurationSection;
             if (configuration.Access != null && configuration.Access.Enabled == false)
             {
                 return false;

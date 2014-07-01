@@ -13,12 +13,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Scarf.Configuration;
+using Scarf.DataSource;
 
-namespace Scarf.DataSource
+namespace Scarf.Tests.Infrastructure
 {
-    internal sealed class MemoryDataSource : ScarfDataSource
+    internal sealed class TestDataSource : ScarfDataSource
     {
-        private static readonly HashSet<ScarfLogMessage> Messages = new HashSet<ScarfLogMessage>();
+        private readonly HashSet<ScarfLogMessage> _messages = new HashSet<ScarfLogMessage>();
 
         public void Initialize(DataSourceElement configuration)
         {
@@ -26,18 +27,18 @@ namespace Scarf.DataSource
 
         public void SaveLogMessage(ScarfLogMessage message)
         {
-            Messages.Add(message);
+            _messages.Add(message);
         }
 
         public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             IOrderedEnumerable<ScarfLogMessage> appMessages =
-                from m in Messages
+                from m in _messages
                 where m.Application == application
                 orderby m.LoggedAt descending
                 select m;
 
-            IEnumerable<ScarfLogMessage> viewableMessages = appMessages.Skip(pageIndex*pageSize).Take(pageSize);
+            IEnumerable<ScarfLogMessage> viewableMessages = appMessages.Skip(pageIndex * pageSize).Take(pageSize);
 
             foreach (var logMessage in viewableMessages)
             {
@@ -49,7 +50,7 @@ namespace Scarf.DataSource
 
         public ScarfLogMessage GetMessageById(Guid messageId)
         {
-            return Messages.SingleOrDefault(m => m.EntryId == messageId);
+            return _messages.SingleOrDefault(m => m.EntryId == messageId);
         }
     }
 }

@@ -13,46 +13,46 @@ using System.Configuration;
 
 namespace Scarf.Configuration
 {
-    public sealed class ScarfSection : ConfigurationSection
+    public class ScarfSection : ConfigurationSection
     {
         [ConfigurationProperty("dataSource", IsRequired=false)]
-        public DataSourceElement DataSource 
+        public virtual DataSourceElement DataSource 
         {
             get { return (DataSourceElement)base["dataSource"]; }
         }
 
         [ConfigurationProperty("audit", IsRequired = false)]
-        public AuditElement Audit
+        public virtual AuditElement Audit
         {
             get { return (AuditElement)base["audit"]; }
         }
 
         [ConfigurationProperty("action", IsRequired = false)]
-        public ActionElement Action
+        public virtual ActionElement Action
         {
             get { return (ActionElement)base["action"]; }
         }
 
         [ConfigurationProperty("access", IsRequired = false)]
-        public AccessElement Access
+        public virtual AccessElement Access
         {
             get { return (AccessElement)base["access"]; }
         }
 
         [ConfigurationProperty("debug", IsRequired = false)]
-        public DebugElement Debug
+        public virtual DebugElement Debug
         {
             get { return (DebugElement)base["debug"]; }
         }
 
         [ConfigurationProperty("security", IsRequired = false)]
-        public SecurityElement Security
+        public virtual SecurityElement Security
         {
             get { return (SecurityElement)base["security"]; }
         }
 
         [ConfigurationProperty("applicationName")]
-        public string ApplicationName
+        public virtual string ApplicationName
         {
             get { return (string) base["applicationName"]; }
         }

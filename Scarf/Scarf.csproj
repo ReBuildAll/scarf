@@ -86,7 +86,7 @@
     <Compile Include="Configuration\DebugElement.cs" />
     <Compile Include="Configuration\ScarfSection.cs" />
     <Compile Include="Configuration\SecurityElement.cs" />
-    <Compile Include="DataSource\DataSourceFactory.cs" />
+    <Compile Include="DataSource\DefaultDataSourceFactory.cs" />
     <Compile Include="DataSource\FileDataSource.cs" />
     <Compile Include="DataSource\ScarfDataSource.cs" />
     <Compile Include="DataSource\MemoryDataSource.cs" />
@@ -94,9 +94,10 @@
     <Compile Include="DebugLogMessage.cs" />
     <Compile Include="ScarfAction.cs" />
     <Compile Include="ScarfAudit.cs" />
+    <Compile Include="ScarfConfiguration.cs" />
     <Compile Include="ScarfLogging.cs" />
     <Compile Include="ScarfContext.cs" />
-    <Compile Include="LogMessage.cs" />
+    <Compile Include="ScarfLogMessage.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="MessageClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

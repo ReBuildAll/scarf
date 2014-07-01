@@ -28,7 +28,7 @@ namespace Scarf.DataSource
             connectionStringName = configuration.ConnectionStringName;
         }
 
-        public void SaveLogMessage(LogMessage message)
+        public void SaveLogMessage(ScarfLogMessage message)
         {
             using (var connection = new SqlConnection(GetConnectionString()))
             using (SqlCommand command = CreateInsertCommand(connection, message))
@@ -39,7 +39,7 @@ namespace Scarf.DataSource
             }
         }
 
-        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<LogMessage> messageList)
+        public int GetMessages(string application, int pageIndex, int pageSize, ICollection<ScarfLogMessage> messageList)
         {
             using (var connection = new SqlConnection(GetConnectionString()))
             using (SqlCommand command = CreateMutipleQueryCommand(connection, application, pageIndex, pageSize))
@@ -54,28 +54,28 @@ namespace Scarf.DataSource
             }
         }
 
-        private void ReadAllMessagesFromReader(ICollection<LogMessage> messageList, SqlDataReader reader)
+        private void ReadAllMessagesFromReader(ICollection<ScarfLogMessage> messageList, SqlDataReader reader)
         {
             while (reader.Read())
             {
-                LogMessage message = ReadMessageFromReader(reader);
+                ScarfLogMessage message = ReadMessageFromReader(reader);
                 messageList.Add(message);
             }
         }
         
-        private LogMessage ReadMessageFromReader(SqlDataReader reader)
+        private ScarfLogMessage ReadMessageFromReader(SqlDataReader reader)
         {
             string messageClassString = reader.GetString(reader.GetOrdinal("Class"));
             string messageAsJson = reader.GetString(reader.GetOrdinal("LogMessageAsJson"));
 
             var messageClass = (MessageClass)Enum.Parse(typeof(MessageClass), messageClassString);
             
-            var message = (LogMessage) JsonConvert.DeserializeObject(messageAsJson, ScarfLogging.MapMessageClassToClrType(messageClass));
+            var message = (ScarfLogMessage) JsonConvert.DeserializeObject(messageAsJson, ScarfLogging.MapMessageClassToClrType(messageClass));
             
             return message;
         }
 
-        public LogMessage GetMessageById(Guid messageId)
+        public ScarfLogMessage GetMessageById(Guid messageId)
         {
             using (var connection = new SqlConnection(GetConnectionString()))
             using (SqlCommand command = CreateSingleQueryCommand(connection, messageId))
@@ -85,7 +85,7 @@ namespace Scarf.DataSource
                 {
                     if (reader.Read())
                     {
-                        LogMessage message = ReadMessageFromReader(reader);
+                        ScarfLogMessage message = ReadMessageFromReader(reader);
                         return message;
                     }
                     else
@@ -154,7 +154,7 @@ WHERE RN BETWEEN @StartRowIndex AND @EndRowIndex
             
         }
 
-        private SqlCommand CreateInsertCommand(SqlConnection connection, LogMessage message)
+        private SqlCommand CreateInsertCommand(SqlConnection connection, ScarfLogMessage message)
         {
             SqlCommand insertCommand = connection.CreateCommand();
 
