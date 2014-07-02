@@ -47,9 +47,13 @@ namespace Scarf
 
         public const string ActionServiceCall = "Service Call";
 
+        public const string ActionServiceCallReceived = "Service Call Received";
+
         public const string ActionUiCommand = "UI-Command";
 
         public const string ActionPayment = "Payment";
+
+        public const string ActionEvent = "Event";
 
         public const string DebugMessage = "Debug Message";
 
@@ -77,8 +81,12 @@ namespace Scarf
                     return "Payment";
                 case ActionServiceCall:
                     return "Service call";
+                case ActionServiceCallReceived:
+                    return "Service call received";
                 case ActionUiCommand:
                     return "UI Command";
+                case ActionEvent:
+                    return "Event";
                 case AuditChangeLogin:
                     return "Change login details";
                 case AuditChangePassword:

@@ -40,6 +40,7 @@ namespace DemoWebsite.Controllers
         }
 
         [HttpGet]
+        [LogAccess(MessageType.AccessRead)]
         public ActionResult Feedback()
         {
             return View();

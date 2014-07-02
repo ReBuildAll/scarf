@@ -1,9 +1,11 @@
-﻿using System;
-
-namespace Scarf.MVC
+﻿namespace Scarf
 {
-    public class ScarfAction
+    public static class ScarfAction
     {
+        public static void Start(string messageType)
+        {
+            ScarfContext.Current.CreatePrimaryMessage(MessageClass.Action, messageType);
+        }
         public static void SetMessage(string message)
         {
             ScarfContext.Current.PrimaryMessage.Message = message;

@@ -11,7 +11,6 @@
 
 using System;
 using System.Web.Http.Filters;
-using Scarf.MVC;
 
 namespace Scarf.WebApi
 {

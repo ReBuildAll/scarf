@@ -36,7 +36,7 @@ namespace Scarf
 
         public DateTime LoggedAt { get; set; }
 
-        public string ResourceURI { get; set; }
+        public string ResourceUri { get; set; }
 
         public string User { get; set; }
 

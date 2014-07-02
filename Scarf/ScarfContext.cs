@@ -165,7 +165,7 @@ namespace Scarf
         {
             message.EntryId = Guid.NewGuid();
             message.User = FindUser();
-            message.ResourceURI = FindResourceUri();
+            message.ResourceUri = FindResourceUri();
             message.Application = FindApplication();
             message.MessageClass = messageClass;
             message.MessageType = messageType;

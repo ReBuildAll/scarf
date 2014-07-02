@@ -194,7 +194,7 @@ WHERE RN BETWEEN @StartRowIndex AND @EndRowIndex
             AddParameter(insertCommand, "@LoggedAtUtc", message.LoggedAt);
             AddParameter(insertCommand, "@ApplicationName", Truncate(message.Application,100));
             AddParameter(insertCommand, "@Computer", Truncate(message.Computer,100));
-            AddParameter(insertCommand, "@ResourceUri", Truncate(message.ResourceURI, 150));
+            AddParameter(insertCommand, "@ResourceUri", Truncate(message.ResourceUri, 150));
             AddParameter(insertCommand, "@User", Truncate(message.User, 150));
             AddParameter(insertCommand, "@Class", message.MessageClass.ToString());
             AddParameter(insertCommand, "@Type", Truncate(message.MessageType,50));
