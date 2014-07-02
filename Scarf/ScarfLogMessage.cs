@@ -16,7 +16,7 @@ using Scarf.Utility;
 
 namespace Scarf
 {
-    public abstract class ScarfLogMessage
+    public class ScarfLogMessage
     {
         public const string AdditionalInfo_Form = "Form";
         public const string AdditionalInfo_Cookies = "Cookies";
@@ -67,7 +67,7 @@ namespace Scarf
             }
         }
 
-        internal abstract bool CanSave();
+        internal virtual bool CanSave() { return true; }
 
         internal void AddAdditionalInfo(bool addForm, bool addQueryString, bool addCookies)
         {
