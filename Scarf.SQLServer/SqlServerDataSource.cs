@@ -28,17 +28,7 @@ namespace Scarf.DataSource
             connectionStringName = configuration.ConnectionStringName;
         }
 
-        public void SaveLogMessage(ScarfLogMessage message)
-        {
-            using (var connection = new SqlConnection(GetConnectionString()))
-            {
-                connection.Open();
-                SaveLogMessageInternal(message, connection);
-                connection.Close();
-            }
-        }
-
-        public void SaveLogMessages(params ScarfLogMessage[] messages)
+        public void SaveLogMessages(IEnumerable<ScarfLogMessage> messages)
         {
             using (var connection = new SqlConnection(GetConnectionString()))
             {
@@ -95,7 +85,7 @@ namespace Scarf.DataSource
 
             var messageClass = (MessageClass)Enum.Parse(typeof(MessageClass), messageClassString);
             
-            var message = (ScarfLogMessage) JsonConvert.DeserializeObject(messageAsJson, ScarfLogging.MapMessageClassToClrType(messageClass));
+            var message = (ScarfLogMessage) JsonConvert.DeserializeObject(messageAsJson, ScarfLogMessage.GetMessageClassClrType(messageClass));
             
             return message;
         }

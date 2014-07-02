@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Security;
 using System.Threading;
 using System.Web;
@@ -21,13 +22,24 @@ using Scarf.Utility;
 
 namespace Scarf
 {
-    public sealed class ScarfContext : IDisposable
+    public interface IScarfContext: IDisposable
+    {
+        void CreateMessage(
+            MessageClass messageClass,
+            string messageType,
+            MessageOptions messageOptions = null);
+        void UpdateMessageDetails(string details);
+        void UpdateMessageAdditionalInfo(string infoKey, Dictionary<string, string> info);
+        void Commit();
+    }
+
+    public sealed class ScarfContext : IScarfContext
     {
         #region Static
 
         [ThreadStatic] private static ScarfContext threadContext;
 
-        public static ScarfContext Current
+        internal static ScarfContext CurrentInternal
         {
             get
             {
@@ -46,20 +58,15 @@ namespace Scarf
             }
         }
 
-        public static ScarfContext CreateInlineContext(HttpContextBase httpContext = null )
+        internal static bool HasThreadContext
         {
-            if (httpContext != null)
+            get
             {
-                return GetCurrent(httpContext);
+                return threadContext != null;
             }
-            if (threadContext != null)
-            {
-                throw new InvalidOperationException("Cannot have multiple inline contexts on the same thread!");
-            }
-            return GetThreadContext();
         }
 
-        private static ScarfContext GetThreadContext()
+        internal static ScarfContext GetThreadContext()
         {
             if (threadContext == null)
             {
@@ -68,7 +75,7 @@ namespace Scarf
             return threadContext;
         }
 
-        private static ScarfContext GetCurrent(HttpContextBase httpContext)
+        internal static ScarfContext GetCurrent(HttpContextBase httpContext)
         {
             if (httpContext.Items["ScarfContext"] == null)
             {
@@ -84,7 +91,7 @@ namespace Scarf
 
         private ScarfLogMessage _primaryMessage;
 
-        private List<ScarfLogMessage> _secondaryMessages = new List<ScarfLogMessage>();
+        private readonly List<ScarfLogMessage> _secondaryMessages = new List<ScarfLogMessage>();
         
         private ScarfContext(HttpContextBase httpContext)
         {
@@ -96,12 +103,12 @@ namespace Scarf
             get { return _primaryMessage; }
         }
 
-        public void UpdateCurrentMessageWithDetails(string details)
+        public void UpdateMessageDetails(string details)
         {
             PrimaryMessage.Details = details;
         }
 
-        public void UpdateCurrentMessageWithAdditionalInfo(string infoKey, Dictionary<string, string> info)
+        public void UpdateMessageAdditionalInfo(string infoKey, Dictionary<string, string> info)
         {
             Contract.Assert(PrimaryMessage != null);
 
@@ -110,26 +117,34 @@ namespace Scarf
 
         public void Commit()
         {
-            SaveMessage(_primaryMessage);
+            SaveMessages();
             _primaryMessage = null;
+            _secondaryMessages.Clear();
         }
 
-        public void Rollback()
+        private void Rollback()
         {
             _primaryMessage = null;
             _secondaryMessages.Clear();
         }
 
-        public void SaveMessage(ScarfLogMessage message)
+        private void SaveMessages()
         {
-            if (message.CanSave())
+            var messages = new HashSet<ScarfLogMessage>();
+            if (_primaryMessage != null)
             {
-                ScarfDataSource dataSource = ScarfConfiguration.DataSourceFactory.CreateDataSourceInstance();
-                dataSource.SaveLogMessage(message);
+                messages.Add(_primaryMessage);
             }
+            foreach (var message in _secondaryMessages)
+            {
+                messages.Add(message);
+            }
+
+            ScarfDataSource dataSource = ScarfConfiguration.DataSourceFactory.CreateDataSourceInstance();
+            dataSource.SaveLogMessages(messages.Where(m => m.CanSave()));
         }
 
-        public void CreatePrimaryMessage(
+        public void CreateMessage(
             MessageClass messageClass, 
             string messageType,
             MessageOptions messageOptions = null )
@@ -143,25 +158,47 @@ namespace Scarf
                 throw new InvalidOperationException("Disposed context cannot be used!");
             }
 
-            _primaryMessage = ScarfLogging.CreateEmptyMessageInstanceFromClass(messageClass, _httpContext);
-
-            FillMessageDefaultValues(messageClass, messageType, _primaryMessage);
-
-            FillMessageAdditionalInfo(messageOptions);
+            _primaryMessage = CreateScarfLogMessage(messageClass, messageType, messageOptions);
         }
 
-        private void FillMessageAdditionalInfo(MessageOptions messageOptions)
+        internal ScarfLogMessage AddSecondaryMessage(MessageClass messageClass, string messageType, MessageOptions messageOptions = null)
+        {
+            if (IsDisposed)
+            {
+                throw new InvalidOperationException("Disposed context cannot be used!");
+            }
+
+            ScarfLogMessage msg = CreateScarfLogMessage(messageClass, messageType, messageOptions);
+
+            _secondaryMessages.Add(msg);
+
+            return msg;
+
+        }
+
+        private ScarfLogMessage CreateScarfLogMessage(MessageClass messageClass, string messageType, MessageOptions messageOptions)
+        {
+            ScarfLogMessage msg = ScarfLogMessage.CreateInstanceFromMessageClass(messageClass, _httpContext);
+
+            FillMessageDefaultValues(msg, messageClass, messageType);
+
+            FillMessageAdditionalInfo(msg, messageOptions);
+
+            return msg;
+        }
+
+        private void FillMessageAdditionalInfo(ScarfLogMessage message, MessageOptions messageOptions)
         {
             if (messageOptions != null && messageOptions.SaveAdditionalInfo)
             {
-                _primaryMessage.AddAdditionalInfo(
+                message.AddAdditionalInfo(
                     messageOptions.AddFormVariables,
                     messageOptions.AddQueryStringVariables,
                     messageOptions.AddCookies);
             }
         }
 
-        private void FillMessageDefaultValues(MessageClass messageClass, string messageType, ScarfLogMessage message)
+        private void FillMessageDefaultValues(ScarfLogMessage message, MessageClass messageClass, string messageType)
         {
             message.EntryId = Guid.NewGuid();
             message.User = FindUser();
@@ -211,7 +248,7 @@ namespace Scarf
 
         }
 
-        internal string FindUser()
+        private string FindUser()
         {
             if (_httpContext != null)
             {
@@ -273,7 +310,7 @@ namespace Scarf
             threadContext = null;
         }
 
-        public bool IsDisposed { get; private set; }
+        private bool IsDisposed { get; set; }
 
         #endregion
     }

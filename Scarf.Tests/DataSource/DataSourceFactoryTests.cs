@@ -104,12 +104,7 @@ namespace Scarf.Tests.DataSource
                 throw new NotImplementedException();
             }
 
-            public void SaveLogMessage(ScarfLogMessage message)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void SaveLogMessages(params ScarfLogMessage[] messages)
+            public void SaveLogMessages(IEnumerable<ScarfLogMessage> messages)
             {
                 throw new NotImplementedException();
             }

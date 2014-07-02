@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -90,7 +86,7 @@ namespace DemoWebsite.Controllers
                 {
                     await SignInAsync(user, isPersistent: false);
 
-                    ScarfAudit.CreatedUser(model.UserName);
+                    ScarfAudit.UserCreated(model.UserName);
                     return RedirectToAction("Index", "Home");
                 }
                 else

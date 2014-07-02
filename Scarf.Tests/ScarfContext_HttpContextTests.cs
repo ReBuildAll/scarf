@@ -70,8 +70,8 @@ namespace Scarf.Tests
             var httpContext1 = CreateHttpContext();
             var httpContext2 = CreateHttpContext();
 
-            using (ScarfContext context1 = ScarfContext.CreateInlineContext(httpContext1.Object))
-            using (ScarfContext context2 = ScarfContext.CreateInlineContext(httpContext2.Object))
+            using (IScarfContext context1 = ScarfLogging.BeginInlineContext(httpContext1.Object))
+            using (IScarfContext context2 = ScarfLogging.BeginInlineContext(httpContext2.Object))
             {
             }
         }
@@ -81,9 +81,9 @@ namespace Scarf.Tests
         {
             var httpContext1 = CreateHttpContext();
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext(httpContext1.Object))
+            using (IScarfContext context = ScarfLogging.BeginInlineContext(httpContext1.Object))
             {
-                context.CreatePrimaryMessage(MessageClass.Action, MessageType.ActionPayment);
+                context.CreateMessage(MessageClass.Action, MessageType.ActionPayment);
                 context.Commit();
             }
 

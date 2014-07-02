@@ -65,9 +65,9 @@ namespace Scarf.Tests.Configuration
         {
             debugElementMock.SetupGet(d => d.Enabled).Returns(true);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Debug, MessageType.DebugMessage);
+                context.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
                 context.Commit();
             }
 
@@ -80,13 +80,13 @@ namespace Scarf.Tests.Configuration
         {
             debugElementMock.SetupGet(d => d.Enabled).Returns(false);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Access, MessageType.AccessRead);
+                context.CreateMessage(MessageClass.Access, MessageType.AccessRead);
                 context.Commit();
-                context.CreatePrimaryMessage(MessageClass.Action, MessageType.ActionCommand);
+                context.CreateMessage(MessageClass.Action, MessageType.ActionCommand);
                 context.Commit();
-                context.CreatePrimaryMessage(MessageClass.Audit, MessageType.AuditLogout);
+                context.CreateMessage(MessageClass.Audit, MessageType.AuditLogout);
                 context.Commit();
             }
 
@@ -98,9 +98,9 @@ namespace Scarf.Tests.Configuration
         {
             debugElementMock.SetupGet(d => d.Enabled).Returns(false);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Debug, MessageType.DebugMessage);
+                context.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
                 context.Commit();
             }
 
@@ -112,9 +112,9 @@ namespace Scarf.Tests.Configuration
         {
             accessElementMock.SetupGet(d => d.Enabled).Returns(true);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Access, MessageType.AccessRead);
+                context.CreateMessage(MessageClass.Access, MessageType.AccessRead);
                 context.Commit();
             }
 
@@ -127,9 +127,9 @@ namespace Scarf.Tests.Configuration
         {
             accessElementMock.SetupGet(d => d.Enabled).Returns(false);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Access, MessageType.AccessRead);
+                context.CreateMessage(MessageClass.Access, MessageType.AccessRead);
                 context.Commit();
             }
 
@@ -141,9 +141,9 @@ namespace Scarf.Tests.Configuration
         {
             actionElementMock.SetupGet(d => d.Enabled).Returns(true);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Action, MessageType.ActionCommand);
+                context.CreateMessage(MessageClass.Action, MessageType.ActionCommand);
                 context.Commit();
             }
 
@@ -156,9 +156,9 @@ namespace Scarf.Tests.Configuration
         {
             actionElementMock.SetupGet(d => d.Enabled).Returns(false);
             
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Action, MessageType.ActionCommand);
+                context.CreateMessage(MessageClass.Action, MessageType.ActionCommand);
                 context.Commit();
             }
 
@@ -170,9 +170,9 @@ namespace Scarf.Tests.Configuration
         {
             auditElementMock.SetupGet(d => d.Enabled).Returns(true);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Audit, MessageType.AuditResetPassword);
+                context.CreateMessage(MessageClass.Audit, MessageType.AuditResetPassword);
                 context.Commit();
             }
 
@@ -186,7 +186,7 @@ namespace Scarf.Tests.Configuration
             auditElementMock.SetupGet(d => d.Enabled).Returns(true);
             auditElementMock.SetupGet(d => d.LogOnlyFailures).Returns(false);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
                 ScarfAudit.Start(MessageType.AuditResetPassword);
                 ScarfAudit.Succeeded();
@@ -203,7 +203,7 @@ namespace Scarf.Tests.Configuration
             auditElementMock.SetupGet(d => d.Enabled).Returns(true);
             auditElementMock.SetupGet(d => d.LogOnlyFailures).Returns(true);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
                 ScarfAudit.Start(MessageType.AuditResetPassword);
                 ScarfAudit.Succeeded();
@@ -219,7 +219,7 @@ namespace Scarf.Tests.Configuration
             auditElementMock.SetupGet(d => d.Enabled).Returns(true);
             auditElementMock.SetupGet(d => d.LogOnlyFailures).Returns(true);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
                 ScarfAudit.Start(MessageType.AuditResetPassword);
                 ScarfAudit.Failed();
@@ -235,9 +235,9 @@ namespace Scarf.Tests.Configuration
         {
             auditElementMock.SetupGet(d => d.Enabled).Returns(false);
 
-            using (ScarfContext context = ScarfContext.CreateInlineContext())
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreatePrimaryMessage(MessageClass.Audit, MessageType.AuditResetPassword);
+                context.CreateMessage(MessageClass.Audit, MessageType.AuditResetPassword);
                 context.Commit();
             }
 

@@ -15,41 +15,65 @@ namespace Scarf
     {
         public static void Start(string messageType)
         {
-            ScarfContext.Current.CreatePrimaryMessage(MessageClass.Audit, messageType);
+            ScarfLogging.CurrentContext.CreateMessage(MessageClass.Audit, messageType);
         }
 
         public static void LoggedInAs(string username)
         {
-            ScarfContext.Current.PrimaryMessage.Message = string.Format("User '{0}' logged in", username);
-            Succeeded();
-        }
-        
-        public static void CreatedUser(string username)
-        {
-            ScarfContext.Current.PrimaryMessage.Message = string.Format("Created new user '{0}'", username);
+            ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("User '{0}' logged in", username);
             Succeeded();
         }
 
-        public static void PasswordChanged()
+        public static void LoggedOut(string username)
         {
-            ScarfContext.Current.PrimaryMessage.Message = string.Format("Changed password");
+            ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("User '{0}' logged out", username);
+            Succeeded();
+        }
+        
+        public static void UserCreated(string username)
+        {
+            ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("Created new user '{0}'", username);
+            Succeeded();
+        }
+
+        public static void UserDeleted(string username)
+        {
+            ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("Removed user '{0}'", username);
+            Succeeded();
+        }
+
+        public static void PasswordChanged(string forUsername)
+        {
+            ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("User {0} changed password", forUsername);
+            Succeeded();
+        }
+
+        public static void LoginChanged(string oldUsername, string newUsername)
+        {
+            ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("User {0} changed to {1}", oldUsername, newUsername );
+            Succeeded();
+        }
+
+        public static void PasswordReset(string forUsername)
+        {
+            ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("User {0} reset her password", forUsername);
             Succeeded();
         }
 
         public static void Failed()
         {
-            ScarfContext.Current.PrimaryMessage.Message += " failed.";
-            ScarfContext.Current.PrimaryMessage.Success = false;            
+            ScarfContext.CurrentInternal.PrimaryMessage.Message += " failed.";
+            ScarfContext.CurrentInternal.PrimaryMessage.Success = false;            
         }
 
         public static void Succeeded()
         {
-            ScarfContext.Current.PrimaryMessage.Success = true;
+            ScarfContext.CurrentInternal.PrimaryMessage.Success = true;
         }
 
         public static bool HasResult
         {
-            get { return ScarfContext.Current.PrimaryMessage.Success.HasValue; }
+            get { return ScarfContext.CurrentInternal.PrimaryMessage.Success.HasValue; }
         }
     }
 }

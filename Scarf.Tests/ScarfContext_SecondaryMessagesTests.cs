@@ -9,8 +9,6 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
-using System;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Scarf.Tests.Configuration;
 using Scarf.Tests.Infrastructure;
@@ -18,7 +16,7 @@ using Scarf.Tests.Infrastructure;
 namespace Scarf.Tests
 {
     [TestClass]
-    public class ScarfContext_InlineTests
+    public class ScarfContext_SecondaryMessagesTests
     {
         private static TestDataSource dataSource;
 
@@ -38,59 +36,78 @@ namespace Scarf.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void CannotNestInlineContexts()
-        {
-            using (IScarfContext context1 = ScarfLogging.BeginInlineContext())
-            using (IScarfContext context2 = ScarfLogging.BeginInlineContext())
-            {
-            }
-        }
-
-        [TestMethod]
-        public void SingleAmbientMessage()
+        public void NoMessages()
         {
             using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
                 context.Commit();
-            }
-
-            Assert.AreEqual(1, dataSource.Messages.Count);
-            Assert.AreEqual(MessageClass.Debug, dataSource.Messages.First().MessageClass);
-        }
-
-        [TestMethod]
-        public void NoChangesWithNoCommit()
-        {
-            using (IScarfContext context = ScarfLogging.BeginInlineContext())
-            {
-                context.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
             }
 
             Assert.AreEqual(0, dataSource.Messages.Count);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void CannotCreateSeveralAmbientMessages()
+        public void OnePrimary_ZeroSecondary()
         {
             using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
-                context.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
+                context.CreateMessage(MessageClass.Access, MessageType.AccessRead);
+                context.Commit();
             }
+
+            Assert.AreEqual(1, dataSource.Messages.Count);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void DisposedContextCannotBeUsed()
+        public void OnePrimary_OneSecondary()
         {
             using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
-                context.Dispose();
-                context.CreateMessage(MessageClass.Debug, MessageType.DebugMessage);
+                context.CreateMessage(MessageClass.Access, MessageType.AccessRead);
+                ScarfLogging.Debug("Hello world!");
+                context.Commit();
             }
+
+            Assert.AreEqual(2, dataSource.Messages.Count);
+        }
+
+        [TestMethod]
+        public void ZeroPrimary_OneSecondary()
+        {
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
+            {
+                ScarfLogging.Debug("Hello world!");
+                context.Commit();
+            }
+
+            Assert.AreEqual(1, dataSource.Messages.Count);
+        }
+
+        [TestMethod]
+        public void ZeroPrimary_MultipleSecondary()
+        {
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
+            {
+                ScarfLogging.Debug("Hello world!");
+                ScarfLogging.Debug("Hello world!");
+                ScarfLogging.Debug("Hello world!");
+                context.Commit();
+            }
+
+            Assert.AreEqual(3, dataSource.Messages.Count);
+        }
+
+        [TestMethod]
+        public void DebugMessage()
+        {
+            using (IScarfContext context = ScarfLogging.BeginInlineContext())
+            {
+                ScarfLogging.Debug("Testing");
+                ScarfLogging.Debug("Testing 123");
+                context.Commit();
+            }
+
+            Assert.AreEqual(2, dataSource.Messages.Count);
         }
     }
 }

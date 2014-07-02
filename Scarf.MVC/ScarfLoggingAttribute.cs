@@ -44,7 +44,7 @@ namespace Scarf.MVC
                 AddCookies = AddCookies
             };
 
-            ScarfContext.Current.CreatePrimaryMessage(this.MessageClass, this.MessageType, options );
+            ScarfLogging.CurrentContext.CreateMessage(this.MessageClass, this.MessageType, options );
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
@@ -58,10 +58,10 @@ namespace Scarf.MVC
 
             if (filterContext.Exception != null)
             {
-                ScarfContext.Current.UpdateCurrentMessageWithDetails(filterContext.Exception.ToString());
+                ScarfLogging.CurrentContext.UpdateMessageDetails(filterContext.Exception.ToString());
             }
 
-            ScarfContext.Current.Commit();
+            ScarfLogging.CurrentContext.Commit();
         }
 
         private void UpdateModelState(ActionExecutedContext filterContext)
@@ -86,12 +86,12 @@ namespace Scarf.MVC
 
                 if (modelStateInfo.Count > 0)
                 {
-                    ScarfContext.Current.UpdateCurrentMessageWithAdditionalInfo(ScarfLogMessage.AdditionalInfo_ModelState,
+                    ScarfLogging.CurrentContext.UpdateMessageAdditionalInfo(ScarfLogMessage.AdditionalInfo_ModelState,
                         modelStateInfo);
                 }
                 else
                 {
-                    ScarfContext.Current.UpdateCurrentMessageWithAdditionalInfo(ScarfLogMessage.AdditionalInfo_ModelState,
+                    ScarfLogging.CurrentContext.UpdateMessageAdditionalInfo(ScarfLogMessage.AdditionalInfo_ModelState,
                         null);
                 }
             }

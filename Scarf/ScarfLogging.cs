@@ -18,46 +18,46 @@ namespace Scarf
     {
         public static void Debug(string message, string details = null)
         {
-            ScarfContext.Current.CreatePrimaryMessage(MessageClass.Debug, MessageType.DebugMessage);
-            if (ScarfContext.Current.PrimaryMessage.CanSave() == false) return;
+            ScarfLogMessage msg = ScarfContext.CurrentInternal.AddSecondaryMessage(
+                MessageClass.Debug, 
+                MessageType.DebugMessage,
+                new MessageOptions
+                {
+                    AddCookies = true,
+                    AddFormVariables = true,
+                    AddQueryStringVariables = true,
+                    SaveAdditionalInfo = true,
+                });
+            if (msg.CanSave() == false) return;
 
-            ScarfContext.Current.PrimaryMessage.AddAdditionalInfo(true, true, true);
-            ScarfContext.Current.PrimaryMessage.Message = message;
-            ScarfContext.Current.PrimaryMessage.Details = details;
+            msg.Message = message;
+            msg.Details = details;
         }
 
-        internal static ScarfLogMessage CreateEmptyMessageInstanceFromClass(MessageClass messageClass, HttpContextBase httpContext)
+        public static void Flush()
         {
-            switch (messageClass)
+            CurrentContext.Commit();
+        }
+
+        public static IScarfContext CurrentContext
+        {
+            get
             {
-                case MessageClass.Debug:
-                    return new DebugLogMessage(httpContext);
-                case MessageClass.Audit:
-                    return new AuditLogMessage(httpContext);
-                case MessageClass.Action:
-                    return new ActionLogMessage(httpContext);
-                case MessageClass.Access:
-                    return new AccessLogMessage(httpContext);
-                default:
-                    throw new InvalidOperationException();
+                return ScarfContext.CurrentInternal;
             }
         }
 
-        public static Type MapMessageClassToClrType(MessageClass messageClass)
+        public static IScarfContext BeginInlineContext(HttpContextBase httpContext = null )
         {
-            switch (messageClass)
+            if (httpContext != null)
             {
-                case MessageClass.Debug:
-                    return typeof(DebugLogMessage);
-                case MessageClass.Audit:
-                    return typeof(AuditLogMessage);
-                case MessageClass.Action:
-                    return typeof(ActionLogMessage);
-                case MessageClass.Access:
-                    return typeof(AccessLogMessage);
-                default:
-                    throw new InvalidOperationException();
+                return ScarfContext.GetCurrent(httpContext);
             }
+            if (ScarfContext.HasThreadContext)
+            {
+                throw new InvalidOperationException("Cannot have multiple inline contexts on the same thread!");
+            }
+            return ScarfContext.GetThreadContext();
         }
     }
 }

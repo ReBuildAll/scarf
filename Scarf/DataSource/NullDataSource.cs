@@ -21,11 +21,7 @@ namespace Scarf.DataSource
         {            
         }
 
-        public void SaveLogMessage(ScarfLogMessage message)
-        {
-        }
-
-        public void SaveLogMessages(params ScarfLogMessage[] messages)
+        public void SaveLogMessages(IEnumerable<ScarfLogMessage> messages)
         {
         }
 

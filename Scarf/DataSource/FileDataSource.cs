@@ -31,7 +31,7 @@ namespace Scarf.DataSource
             loggingFolder = configuration.Path;
         }
 
-        public void SaveLogMessage(ScarfLogMessage message)
+        private void SaveLogMessage(ScarfLogMessage message)
         {
             string json = JsonConvert.SerializeObject(message, Formatting.Indented);
 
@@ -43,7 +43,7 @@ namespace Scarf.DataSource
             File.WriteAllText(Path.Combine(loggingFolder, filename), json);
         }
 
-        public void SaveLogMessages(params ScarfLogMessage[] messages)
+        public void SaveLogMessages(IEnumerable<ScarfLogMessage> messages)
         {
             foreach (var scarfLogMessage in messages)
             {

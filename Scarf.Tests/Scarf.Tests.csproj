@@ -91,11 +91,15 @@
     <Compile Include="Configuration\DataSourceElementTests.cs" />
     <Compile Include="Configuration\MessageClassEnableDisableTests.cs" />
     <Compile Include="DataSource\DataSourceFactoryTests.cs" />
+    <Compile Include="Infrastructure\InlineScarfContextTestBase.cs" />
     <Compile Include="Infrastructure\TestDataSource.cs" />
     <Compile Include="Infrastructure\TestDataSourceFactory.cs" />
+    <Compile Include="ScarfActionTests.cs" />
+    <Compile Include="ScarfAuditTests.cs" />
     <Compile Include="ScarfContext_HttpContextTests.cs" />
     <Compile Include="ScarfContext_InlineTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScarfContext_SecondaryMessagesTests.cs" />
     <Compile Include="Web\Controllers\ScarfControllerTests.cs" />
     <Compile Include="Infrastructure\ScarfMvcControllerTestBase.cs" />
   </ItemGroup>
@@ -107,6 +111,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MVC\" />
+    <Folder Include="WebApi\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

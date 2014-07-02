@@ -56,14 +56,14 @@ namespace Scarf
 
         public string Details { get; set; }
 
-        public Dictionary<string,Dictionary<string,string>> AdditionalInfo { get; set; }
+        public Dictionary<string, Dictionary<string, string>> AdditionalInfo { get; set; }
 
         internal virtual bool CanSave()
         {
             return true;
         }
 
-        public void AddAdditionalInfo(bool addForm, bool addQueryString, bool addCookies)
+        internal void AddAdditionalInfo(bool addForm, bool addQueryString, bool addCookies)
         {
             if (_httpContext != null)
             {
@@ -77,22 +77,22 @@ namespace Scarf
 
                 EnsureAdditionalInfo();
 
-                AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_ServerVariables,
+                AdditionalInfo.Add(AdditionalInfo_ServerVariables,
                     CollectionUtility.CopyCollection(_httpContext.Request.ServerVariables));
 
                 if (addForm)
                 {
-                    AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_Form,
+                    AdditionalInfo.Add(AdditionalInfo_Form,
                         CollectionUtility.CopyCollection(unvalidatedCollections.Form));
                 }
                 if (addQueryString)
                 {
-                    AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_QueryString,
+                    AdditionalInfo.Add(AdditionalInfo_QueryString,
                         CollectionUtility.CopyCollection(unvalidatedCollections.QueryString));
                 }
                 if (addCookies)
                 {
-                    AdditionalInfo.Add(ScarfLogMessage.AdditionalInfo_Cookies,
+                    AdditionalInfo.Add(AdditionalInfo_Cookies,
                         CollectionUtility.CopyCollection(unvalidatedCollections.Cookie));
                 }
             }
@@ -103,6 +103,40 @@ namespace Scarf
             if (AdditionalInfo == null)
             {
                 AdditionalInfo = new Dictionary<string, Dictionary<string, string>>();
+            }
+        }
+
+        internal static ScarfLogMessage CreateInstanceFromMessageClass(MessageClass messageClass, HttpContextBase httpContext)
+        {
+            switch (messageClass)
+            {
+                case MessageClass.Debug:
+                    return new DebugLogMessage(httpContext);
+                case MessageClass.Audit:
+                    return new AuditLogMessage(httpContext);
+                case MessageClass.Action:
+                    return new ActionLogMessage(httpContext);
+                case MessageClass.Access:
+                    return new AccessLogMessage(httpContext);
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        public static Type GetMessageClassClrType(MessageClass messageClass)
+        {
+            switch (messageClass)
+            {
+                case MessageClass.Debug:
+                    return typeof(DebugLogMessage);
+                case MessageClass.Audit:
+                    return typeof(AuditLogMessage);
+                case MessageClass.Action:
+                    return typeof(ActionLogMessage);
+                case MessageClass.Access:
+                    return typeof(AccessLogMessage);
+                default:
+                    throw new InvalidOperationException();
             }
         }
     }
