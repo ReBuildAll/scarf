@@ -70,9 +70,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogAccessAttribute.cs" />
-    <Compile Include="LogActionAttribute.cs" />
-    <Compile Include="LogAuditAttribute.cs" />
+    <Compile Include="ScarfAccessAttribute.cs" />
+    <Compile Include="ScarfActionAttribute.cs" />
+    <Compile Include="ScarfAuditAttribute.cs" />
     <Compile Include="ScarfAutoFlushAttribute.cs" />
     <Compile Include="ScarfLoggingAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

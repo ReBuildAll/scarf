@@ -83,8 +83,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LogApiAccessAttribute.cs" />
-    <Compile Include="LogApiActionAttribute.cs" />
-    <Compile Include="LogApiAuditAttribute.cs" />
+    <Compile Include="ScarfApiActionAttribute.cs" />
+    <Compile Include="ScarfApiAuditAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScarfApiLoggingAttribute.cs" />
   </ItemGroup>
