@@ -73,6 +73,7 @@
     <Compile Include="LogAccessAttribute.cs" />
     <Compile Include="LogActionAttribute.cs" />
     <Compile Include="LogAuditAttribute.cs" />
+    <Compile Include="ScarfAutoFlushAttribute.cs" />
     <Compile Include="ScarfLoggingAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

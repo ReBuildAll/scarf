@@ -2,7 +2,7 @@
     ViewBag.Title = "About";
 }
 <h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<h3>So what is Scarf anyway?</h3>
 
 <p>
     Scarf is security audit, access and action logging framework for .NET
@@ -41,8 +41,19 @@
         </p>
 
         <pre>
-    ScarfLogging.Debug("You are now in About()!!");
-</pre>
+        [ScarfAutoFlush]
+        public ActionResult About()
+        {
+            ScarfLogging.Debug("You are now in About()!!");
+            return View();
+        }</pre>
+        <p>
+            Because no other Scarf attribute is used, you need either the <code>ScarfAutoFlush</code> attribute on the action
+            method or to call the <code>ScarfLogging.Flush()</code> after invoking the debug log.
+        </p>
+        <p>
+            Note that you can call Debug multiple times even.
+        </p>
         <p>
             Remember, that debug logging needs to be turned on in the configuration for this to work. Otherwise Scarf will
             just ignore the command and nothing gets logged.

@@ -30,7 +30,7 @@ namespace Scarf.Tests
             using (IScarfContext context = ScarfLogging.BeginInlineContext())
             {
                 ScarfAction.Start(MessageType.ActionPayment);
-                ScarfLogging.AddCustom("organizationId", "5");
+                ScarfLogging.AddCustomInfo("organizationId", "5");
                 context.Commit();
             }
             

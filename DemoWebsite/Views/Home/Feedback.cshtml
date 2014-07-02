@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Feedback";
 }
 
@@ -25,6 +24,37 @@
         </label>
     </div>
 
-    <input type="submit" value="Submit"/>
-    
+    <input type="submit" value="Submit" class="btn btn-default" />
 }
+
+<hr />
+
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-question-sign"></span><strong> SCARF HOW-TO</strong></div>
+    <div class="panel-body">
+        <p>
+            This page has two action methods, one for getting and one for posting. The getter logs access, and adds custom
+            values to the log.
+        </p>
+        <pre>
+        [HttpGet]
+        [LogAccess(MessageType.AccessRead)]
+        public ActionResult Feedback()
+        {
+            ScarfLogging.AddCustomInfo("my", "values");
+            ScarfLogging.AddCustomInfo("foo", "bar");
+            return View();
+        }</pre>
+        <p>
+            The post method logs an action. Actions add the form and querystring variables, so they will be in the log as
+            well. Remember, this would log passwords as well (and that is why audits never log the form variables)
+        </p>
+        <pre>
+        [HttpPost]
+        [LogAction(MessageType.ActionUiCommand, Message = "Feedback received")]
+        public ActionResult Feedback( FormCollection form )
+        {
+            return RedirectToAction("Index");
+        }</pre>
+    </div>
+</div>

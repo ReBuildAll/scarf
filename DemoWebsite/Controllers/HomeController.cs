@@ -9,6 +9,7 @@
 // Licensed under MIT license, see included LICENSE file for details
 #endregion
 
+using System;
 using System.Web.Mvc;
 using Scarf;
 using Scarf.MVC;
@@ -23,12 +24,10 @@ namespace DemoWebsite.Controllers
             return View();
         }
 
+        [ScarfAutoFlush]
         public ActionResult About()
         {
-            ViewBag.Message = "So what is Scarf anyway?";
-
             ScarfLogging.Debug("You are now in About()!!");
-
             return View();
         }
 
@@ -43,6 +42,8 @@ namespace DemoWebsite.Controllers
         [LogAccess(MessageType.AccessRead)]
         public ActionResult Feedback()
         {
+            ScarfLogging.AddCustomInfo("my", "values");
+            ScarfLogging.AddCustomInfo("foo", "bar");
             return View();
         }
 
