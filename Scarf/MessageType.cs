@@ -31,6 +31,8 @@ namespace Scarf
 
         public const string AuditChangeLogin = "Change Login";
 
+        public const string AuditExternalLogin = "External login";
+
         public const string AccessRead = "Read";
 
         public const string AccessWrite = "Write";
@@ -99,6 +101,8 @@ namespace Scarf
                     return "Enable user";
                 case AuditLogin:
                     return "Login";
+                case AuditExternalLogin:
+                    return "External login";
                 case AuditLogout:
                     return "Logout";
                 case AuditResetPassword:
