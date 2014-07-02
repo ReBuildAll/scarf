@@ -16,7 +16,7 @@ using Scarf.Utility;
 
 namespace Scarf
 {
-    public class ScarfLogMessage
+    public abstract class ScarfLogMessage
     {
         public const string AdditionalInfo_Form = "Form";
         public const string AdditionalInfo_Cookies = "Cookies";
@@ -56,12 +56,18 @@ namespace Scarf
 
         public string Details { get; set; }
 
-        public Dictionary<string, Dictionary<string, string>> AdditionalInfo { get; set; }
+        private Dictionary<string, Dictionary<string, string>> additionalInfo;
 
-        internal virtual bool CanSave()
+        public Dictionary<string, Dictionary<string, string>> AdditionalInfo
         {
-            return true;
+            get
+            {
+                EnsureAdditionalInfo();
+                return additionalInfo;
+            }
         }
+
+        internal abstract bool CanSave();
 
         internal void AddAdditionalInfo(bool addForm, bool addQueryString, bool addCookies)
         {
@@ -100,9 +106,9 @@ namespace Scarf
 
         private void EnsureAdditionalInfo()
         {
-            if (AdditionalInfo == null)
+            if (additionalInfo == null)
             {
-                AdditionalInfo = new Dictionary<string, Dictionary<string, string>>();
+                additionalInfo = new Dictionary<string, Dictionary<string, string>>();
             }
         }
 
@@ -138,6 +144,16 @@ namespace Scarf
                 default:
                     throw new InvalidOperationException();
             }
+        }
+
+        public void AddCustomInfo(string key, string value)
+        {
+            if (AdditionalInfo.ContainsKey(AdditionalInfo_Custom) == false)
+            {
+                AdditionalInfo.Add(AdditionalInfo_Custom, new Dictionary<string, string>());
+            }
+
+            AdditionalInfo[AdditionalInfo_Custom].Add(key, value);
         }
     }
 }

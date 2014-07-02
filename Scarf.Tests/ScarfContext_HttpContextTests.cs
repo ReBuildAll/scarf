@@ -94,5 +94,11 @@ namespace Scarf.Tests
             Assert.AreEqual(Environment.MachineName, msg.Computer);
             Assert.AreEqual(ConfigurationMocks.ApplicationName, msg.Application);
         }
+
+        [TestMethod]
+        public void ExtractHttpContextCollections()
+        {
+            
+        }
     }
 }

@@ -42,6 +42,12 @@ namespace Scarf
             Succeeded();
         }
 
+        public static void PasswordChanged()
+        {
+            ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("User changed password");
+            Succeeded();
+        }
+
         public static void PasswordChanged(string forUsername)
         {
             ScarfContext.CurrentInternal.PrimaryMessage.Message = string.Format("User {0} changed password", forUsername);

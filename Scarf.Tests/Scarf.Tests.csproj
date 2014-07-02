@@ -92,10 +92,15 @@
     <Compile Include="Configuration\MessageClassEnableDisableTests.cs" />
     <Compile Include="DataSource\DataSourceFactoryTests.cs" />
     <Compile Include="Infrastructure\InlineScarfContextTestBase.cs" />
+    <Compile Include="Infrastructure\ScarfLoggingAttributeTestBase.cs" />
     <Compile Include="Infrastructure\TestDataSource.cs" />
     <Compile Include="Infrastructure\TestDataSourceFactory.cs" />
+    <Compile Include="MVC\LogAccessAttributeTests.cs" />
+    <Compile Include="MVC\LogActionAttributeTests.cs" />
+    <Compile Include="MVC\LogAuditAttributeTests.cs" />
     <Compile Include="ScarfActionTests.cs" />
     <Compile Include="ScarfAuditTests.cs" />
+    <Compile Include="ScarfContext_AdditionalInfoTests.cs" />
     <Compile Include="ScarfContext_HttpContextTests.cs" />
     <Compile Include="ScarfContext_InlineTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +109,14 @@
     <Compile Include="Infrastructure\ScarfMvcControllerTestBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Scarf.MVC\Scarf.MVC.csproj">
+      <Project>{175eaae5-c700-4f97-b40f-5a148d2539f6}</Project>
+      <Name>Scarf.MVC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scarf.WebApi\Scarf.WebApi.csproj">
+      <Project>{dd368e73-cefb-4ede-a757-ebbc27a1b3ec}</Project>
+      <Name>Scarf.WebApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Scarf\Scarf.csproj">
       <Project>{bed72107-63c7-48e1-ab46-2456d19931ce}</Project>
       <Name>Scarf</Name>
@@ -113,7 +126,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MVC\" />
     <Folder Include="WebApi\" />
   </ItemGroup>
   <Choose>

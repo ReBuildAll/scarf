@@ -59,5 +59,10 @@ namespace Scarf
             }
             return ScarfContext.GetThreadContext();
         }
+
+        public static void AddCustom(string key, string value)
+        {
+            ScarfContext.CurrentInternal.PrimaryMessage.AddCustomInfo(key, value);
+        }
     }
 }
