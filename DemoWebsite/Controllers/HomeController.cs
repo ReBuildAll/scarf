@@ -25,7 +25,7 @@ namespace DemoWebsite.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "So what is Scarf anyway?";
 
             ScarfLogging.Debug("You are now in About()!!");
 

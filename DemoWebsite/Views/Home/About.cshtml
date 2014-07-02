@@ -4,4 +4,48 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Scarf is a cool product!</p>
+<p>
+    Scarf is security audit, access and action logging framework for .NET
+</p>
+<p>
+    Many times software come with non functional requirements to track access to resources, to audit events or to
+    simply keep track of who did what in the system. While you can use traditional logging frameworks to save this
+    information, Scarf was specifically designed to log this type of information and to make it effortless and natural to use.
+</p>
+<p>
+    With scarf, you can log audit events, access events and actions performed by the user. Scarfs should work with
+    any type of .NET application but it was mainly intended for MVC and WebApi applications that need to keep track
+    of such events. The integration modules allow you to add attributes to your MVC and WebApi action methods to initiate logging.
+</p>
+<p>
+    Logs are saved in a database or in files (or you can create custom data sources if you want). They contain a
+    lot of information beyond what has happened: HTTP Server headers, query strings variables, POST field values,
+    cookies and even MVC model state values.
+</p>
+<p>
+    The project is hosted on <a href="http://github.com/rebuildall/scarf" target="_blank">GitHub</a>, where you will also find a wiki on how to use Scarf.
+</p>
+<p>
+    Scarf supports unit testing by providing various points for injecting dependencies. Please examine
+    the unit tests to see how you can take advantage of these features.
+</p>
+
+<hr />
+
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-question-sign"></span><strong> SCARF HOW-TO</strong></div>
+    <div class="panel-body">
+        <p>
+            When you visit this page, a debug logging message is entered into the logs. You can add debug logging messages
+            by using the <code>ScarfLogging</code> class.
+        </p>
+
+        <pre>
+    ScarfLogging.Debug("You are now in About()!!");
+</pre>
+        <p>
+            Remember, that debug logging needs to be turned on in the configuration for this to work. Otherwise Scarf will
+            just ignore the command and nothing gets logged.
+        </p>
+    </div>
+</div>

@@ -16,20 +16,44 @@
             the Scarf log. Try registering, logging in and out to see what kind of entries are generated.
         </p>
         <p>
-            This is the default MVC 5 application template, with some texts changed and Scarf attributes added.
+            Every page contains information about what will be logged by Scarf. You can then check out the Scarf 
+            log from the top.
         </p>
         <p><a class="btn btn-default" href="">Learn more &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Get Scarf for you</h2>
-        <p>Scarf can be installed from NuGet.</p>
+        <p>
+            Scarf can be installed from NuGet. Please read the
+            <a href="https://github.com/ReBuildAll/scarf/wiki/configuration" target="_blank">wiki on GitHub</a>
+            to learn about configuration.
+        </p>
         <p><a class="btn btn-default" href="">Learn more &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h2>Open Source</h2>
-        <p>Scarf is free and open source. Get the source now.</p>
+        <p>Scarf is free and open source. Scarf uses the MIT license. The source code is freely available from GitHub.</p>
         <p><a class="btn btn-default" href="https://github.com/ReBuildAll/scarf">Learn more &raquo;</a></p>
     </div>
 </div>
 
-@Url.Action("Index", "Scarf", new { page = ViewBag.CurrentPage - 1 })
+<hr />
+
+<div class="panel panel-default">
+    <div class="panel-heading"><span class="glyphicon glyphicon-question-sign"></span><strong> SCARF HOW-TO</strong></div>
+    <div class="panel-body">
+        <p>
+            Every time you visit this page you get logged. This is because all accesses to this page are logged. Access logging
+            is one type of logging Scarf can provide.
+        </p>
+        <p>
+            To make a MVC Action method do access logging, you add the <code>LogAccess</code> attribute.
+        </p>
+        <pre>
+    <strong>[LogAccess(MessageType.AccessRead, SaveAdditionalInfo = false)]</strong>
+    public ActionResult Index()
+    {
+        return View();
+    }</pre>
+    </div>
+</div>
